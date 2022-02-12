@@ -1,0 +1,58 @@
+
+
+/* create navigation button for main topics*/
+
+ul {
+
+    list-style-type: none;
+    margin: 1em;
+    padding: 0;
+    
+
+}
+
+.boxes li{
+    display: inline;
+    background-color: white;
+    border: solid 1px black;
+    padding: 10px 25px;
+    border: solid black 1px;
+    
+
+
+}
+
+button:hover {
+
+    background-color: burlywood;
+}
+
+.answer-box li{
+    border: solid black 1px;
+    display: inline;
+    
+    
+
+
+}
+
+.answer-box{
+    border: solid blue 1px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    align-content: flex-start;
+    flex-grow: 4;
+    
+    
+   
+
+}
+
+
+/* add main background and switch background based on topics */
+
+/* format answers boxes */
+
+/* add hoover to answers and topics */
