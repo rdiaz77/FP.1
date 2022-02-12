@@ -1,15 +1,15 @@
 
-let person = prompt('Please enter your name: ')
+//let person = prompt('Please enter your name: ')
 // is JS working...
 
-if (person!= null){
+//if (person!= null){
 
-    var userName = document.getElementById('user-name')
-    userName.innerHTML = `Welcome to the Trivia Game ${person}`
-} else {
-    window.alert('Please enter your name')
+//     var userName = document.getElementById('user-name')
+//     userName.innerHTML = `Welcome to the Trivia Game ${person}`
+// } else {
+//     window.alert('Please enter your name')
 
-}
+// }
 
 
 // add event listeners to answers
@@ -61,10 +61,59 @@ answer3.addEventListener('click',function(){
 
 //add player geolocation
 
+function geoLocal(){
+    navigator.geolocation.getCurrentPosition(showPosition)
+}
+function showPosition(position){
+    let latitude = position.coords.latitude
+    let longitude = position.coords.longitude
+    let coordinates = [latitude, longitude]
+    console.log(coordinates)
+}
+
+// start and next Button
+ let startNext = document.getElementById('start')
+ startNext.addEventListener('click',()=>{
+    console.log('let start')
+    setInterval(() => {updateCountDown()}, 1000);
+
+ })    
+
+ let timer = document.getElementById('countdown');
+ let defaultTime = 10;    
+
+ function updateCountDown(){
+     defaultTime-- ;
+     defaultTime >= 0 ? defaultTime : 0
+
+     timer.innerHTML = defaultTime
+     
+ }
+
+ 
+ 
+
+
+
+
+       
+   
+    
+
+
+    
+
 
 // show wrong or right answer
 // add a points counter
 // add a timer
+
+for( let i = 0; i < 30; i++){
+
+
+}
+
+
 //request user name
 //dynamic change of the backgrounds
 // dynamic change of background music
