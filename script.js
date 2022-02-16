@@ -10,27 +10,34 @@
 //     window.alert('Please enter your name')
 
 // }
+// SCIENCE
 
+let category =  {
+    science: '22',
+    geography :'17'
+}
 
-// add event listeners to answers
+var scienceButton = document.getElementById('science')
+    scienceButton.addEventListener('click',function(){
+    console.log('you selected science', + category.science)
+    return category.science
 
-var biology = document.getElementById('biology')
-
-biology.addEventListener('click',function(){
-
-    console.log('you selected biology')
 })
 
-var geography = document.getElementById('geography')
+//GEOGRAPHY
 
-geography.addEventListener('click',function(){
+var geoCat = '22'
+var geographyButton = document.getElementById('geography')
 
-    console.log('you selected geography')
+geographyButton.addEventListener('click',function(){
+    console.log('you selected science', + category.geography)
+    return category.geography
+    
+
 })
 
 
-
-// add EvenListener to Option Selection
+// ANSWERS 
 
 var answer1 = document.getElementById('answer1')
 
@@ -59,7 +66,7 @@ answer3.addEventListener('click',function(){
   
 })
 
-//add player geolocation
+//ADD PLAYER LOCATION
 
 function geoLocal(){
     navigator.geolocation.getCurrentPosition(showPosition)
@@ -71,47 +78,98 @@ function showPosition(position){
     console.log(coordinates)
 }
 
-// start and next Button
- let startNext = document.getElementById('start')
- startNext.addEventListener('click',()=>{
-    console.log('let start')
-    setInterval(() => {updateCountDown()}, 1000);
+// TIMER 
 
- })    
+let startTime = 10;
+let timer = document.getElementById('countdown');
+    timer.innerHTML = startTime;
 
- let timer = document.getElementById('countdown');
- let defaultTime = 10;    
-
- function updateCountDown(){
-     defaultTime-- ;
-     defaultTime >= 0 ? defaultTime : 0
-
-     timer.innerHTML = defaultTime
-     
- }
-
- 
- 
-
-
-
-
-       
-   
+let handleClearInterval = (int) => clearInterval(int)
+let countDown = function(){
+    startTime--;
+    timer.innerHTML = startTime;
     
+}
 
 
+
+//PLAY BUTTON
+let playButton = document.getElementById('start')
+playButton.addEventListener('click', function(){
+    let interval = setInterval(countDown, 1000);
+    interval;
+    if(startTime === 0){
+        handleClearInterval(interval)
+        }
     
+})
 
 
-// show wrong or right answer
-// add a points counter
-// add a timer
 
-for( let i = 0; i < 30; i++){
+//RESET BUTTON
 
+let resetButton = document.getElementById('reset')
+    resetButton.addEventListener('click', function(){
+        console.log('reset')
+        startTime = 10;
+        timer.innerHTML = startTime;
+        //handleClearInterval(interval)
+
+
+})
+// NUMBER OF QUESTIONS
+
+
+// GET QUESTIONS FROM API
+
+let numOfQuestions = '30'
+let categorySelected = '17' // science 17 / geo 22
+let difficultyLevel = 'easy' // medium / hard
+const type = 'multiple'
+let encoding = ''
+
+//API ACCESS
+ 
+
+async function getFetchQuestions(){
+    let request = await fetch(`https://opentdb.com/api.php?amount=${numOfQuestions}&category=${categorySelected}&difficulty=${difficultyLevel}&type=${type}`)
+
+    let response = await request.json()
+    console.log(response)
+    console.log(response.results[0].question)
+    return response.results // this is critical to get the data. 'response' is the main key of the object
+}
+getFetchQuestions()
+
+// API ACCESS TO QUESTIONS / ALTERNATIVES / RIGHT ANSWER
+
+const returnFetchData = async() => {
+    const apiData = await getFetchQuestions();
+    console.log("this is the JS object =>" , apiData) // ACCESS TO OBJ
+//     console.log("this is the info I need =>" , apiData[0].question) // ACCESS TO QUESTIONS
+//     console.log("this is the info I need =>" , apiData[0].correct_answer) // ACCESS TO CORRECT 
+//     console.log("this is the info I need =>" , apiData[0].incorrect_answers[0]) // ACCESS TO WRONG [0,1,2]
+//     console.log("this is the info I need =>" , apiData[0].question)
+
+//     const parsedApiData = apiData.map(post => {
+        
+        
+            
+//     })
 
 }
+returnFetchData()
+
+
+
+// ITERATION OVER API TO GET QUESTIONS
+
+
+
+
+
+// add a points counter
+
 
 
 //request user name
@@ -122,4 +180,8 @@ for( let i = 0; i < 30; i++){
 // add final sound when time's up 
 // add final sound when game finishes
 //add victory wound when completing the set of questions successfully
-//create a list of 10 higher points
+//create a list of 10 higher 
+
+
+
+

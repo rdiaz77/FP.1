@@ -16,24 +16,31 @@
     
     <nav class='boxes'>
         
-        <button class = 'topics' id='biology' type="button">Biology</button>
+        <button class = 'topics' id='science' type="button">Science</button>
         <button class = 'topics' id='geography' type="button">Geography</button>
         
     </nav>
 
-    <p id ='countdown'>30</p>
+    <select name='numberOfQuestions' id ='dropdown-list'>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+    </select>
+
+    <p id ='countdown'>sin numero</p>
 
    
     <div id='timer'></div>
     <div id='score'></div>
-    <button id='start' type="button">Next</button>
+    <button id='start' type="button">Play</button>
+    <button id='reset' type="button">Reset</button>
 
     <section class='answer-box'>
 
-        <button id ='answer1' type="button">Option 1</button>
-        <button id ='answer2' type="button">Option 2</button>
-        <button id ='answer3' type="button">Option 3</button>
-        <button id ='answer4' type="button">Option 4</button>
+        <button id ='answer1' class='option-bttn' type="button"><p id='option1'>option 1</p></button>
+        <button id ='answer2' class='option-bttn' type="button"><p id='option2'>option 2</p></button>
+        <button id ='answer3' class='option-bttn' type="button"><p id='option3'>option 3</p></button>
+        <button id ='answer4' class='option-bttn' type="button"><p id='option4'>option 4</p></button>
 
     </section>
 
