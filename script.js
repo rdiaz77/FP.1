@@ -135,8 +135,8 @@ async function getFetchQuestions(){
     let request = await fetch(`https://opentdb.com/api.php?amount=${numOfQuestions}&category=${categorySelected}&difficulty=${difficultyLevel}&type=${type}`)
 
     let response = await request.json()
-    console.log(response)
-    console.log(response.results[0].question)
+    // console.log(response)
+//    console.log(response.results[0].question)
     return response.results // this is critical to get the data. 'response' is the main key of the object
 }
 getFetchQuestions()
@@ -145,17 +145,26 @@ getFetchQuestions()
 
 const returnFetchData = async() => {
     const apiData = await getFetchQuestions();
-    console.log("this is the JS object =>" , apiData) // ACCESS TO OBJ
-//     console.log("this is the info I need =>" , apiData[0].question) // ACCESS TO QUESTIONS
+   console.log("this is the JS object =>" , apiData) // ACCESS TO OBJ
+  //  console.log("this is the info I need =>" , apiData[0].question) // ACCESS TO QUESTIONS
 //     console.log("this is the info I need =>" , apiData[0].correct_answer) // ACCESS TO CORRECT 
 //     console.log("this is the info I need =>" , apiData[0].incorrect_answers[0]) // ACCESS TO WRONG [0,1,2]
-//     console.log("this is the info I need =>" , apiData[0].question)
+    let triviaData = apiData.map(trivia => {
+       // console.log(trivia)
+        let triviaObj = {
+            questions: trivia.question,
+            rightAnswer: trivia.correct_answer,
+            wrongAnswer1: trivia.incorrect_answers[0],
+            wrongAnswer2: trivia.incorrect_answers[1],
+            wrongAnswer3: trivia.incorrect_answers[2]
+        }
 
-//     const parsedApiData = apiData.map(post => {
-        
-        
-            
-//     })
+        console.log(triviaObj)
+        return triviaObj
+    })
+
+
+     
 
 }
 returnFetchData()
