@@ -149,11 +149,11 @@ const returnFetchData = async() => {
   
    return apiData.map(trivia => {
         return {
-            questions: trivia.question,
-            rightAnswer: trivia.correct_answer,
-            wrongAnswer1: trivia.incorrect_answers[0],
-            wrongAnswer2: trivia.incorrect_answers[1],
-            wrongAnswer3: trivia.incorrect_answers[2]
+            receivedQuestions: trivia.question,
+            receivedRightAnswer: trivia.correct_answer,
+            receiveWrongAnswer1: trivia.incorrect_answers[0],
+            receivedWrongAnswer2: trivia.incorrect_answers[1],
+            receivedWrongAnswer3: trivia.incorrect_answers[2]
         }
 
     
@@ -161,33 +161,46 @@ const returnFetchData = async() => {
      
 }
 //returnFetchData()
-
-
-
-
+var count = 2
 
 
 
 // INITIAL QUESTION
 async function postQuestions(){
-   let initialQuestion = document.getElementById('question')
-   initialQuestion.innerHTML = questionToBePosted
-   let questions = await returnFetchData()
-   
-//    for (let i = 0; i < questions.length; i++){
-//        let questionToBePosted = questions[i];
-       
-//        console.log(questionToBePosted)
-//         return questionToBePosted
-
-   }
-
-   console.log(questions)
-}
+    let startQuestion = await returnFetchData()
+    // console.log(startQuestion)
+    let questionToBePosted = await startQuestion[count].receivedQuestions;
+    let questionContainer = document.getElementById('question')
+    let questionPElement = document.createElement('p')
+    questionPElement.innerHTML = questionToBePosted;
+    questionContainer.append(questionPElement)
+  }
 postQuestions()
+
 
 // POTENTIAL ANSWERS - HOW TO SHUFFLE?
 
+async function postOptions(){
+
+    let options = await returnFetchData();
+    let optionToBePostedRight = await options[count].receivedRightAnswer;
+    let optionToBePostedWr1 = await options[count].receiveWrongAnswer1;
+    let optionToBePostedWr2 = await options[count].receivedWrongAnswer2;
+    let optionToBePostedWr3 = await options[count].receivedWrongAnswer3;
+    let option1 = document.getElementById('option1');
+    option1.innerHTML = optionToBePostedRight
+    let option2 = document.getElementById('option2');
+    option2.innerHTML = optionToBePostedWr1
+    let option3 = document.getElementById('option3');
+    option3.innerHTML = optionToBePostedWr2
+    let option4 = document.getElementById('option4');
+    option4.innerHTML = optionToBePostedWr3
+    console.log(optionToBePostedRight)
+
+
+}
+
+postOptions()
 //function postAlternatives()
 
 
