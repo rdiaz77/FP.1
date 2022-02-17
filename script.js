@@ -145,13 +145,10 @@ getFetchQuestions()
 
 const returnFetchData = async() => {
     const apiData = await getFetchQuestions();
-   console.log("this is the JS object =>" , apiData) // ACCESS TO OBJ
-  //  console.log("this is the info I need =>" , apiData[0].question) // ACCESS TO QUESTIONS
-//     console.log("this is the info I need =>" , apiData[0].correct_answer) // ACCESS TO CORRECT 
-//     console.log("this is the info I need =>" , apiData[0].incorrect_answers[0]) // ACCESS TO WRONG [0,1,2]
-    let triviaData = apiData.map(trivia => {
-       // console.log(trivia)
-        let triviaObj = {
+   //console.log("this is the JS object =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
+  
+   return apiData.map(trivia => {
+        return {
             questions: trivia.question,
             rightAnswer: trivia.correct_answer,
             wrongAnswer1: trivia.incorrect_answers[0],
@@ -159,16 +156,39 @@ const returnFetchData = async() => {
             wrongAnswer3: trivia.incorrect_answers[2]
         }
 
-        console.log(triviaObj)
-        return triviaObj
+    
     })
-
-
      
-
 }
-returnFetchData()
+//returnFetchData()
 
+
+
+
+
+
+
+// INITIAL QUESTION
+async function postQuestions(){
+   let initialQuestion = document.getElementById('question')
+   initialQuestion.innerHTML = questionToBePosted
+   let questions = await returnFetchData()
+   
+//    for (let i = 0; i < questions.length; i++){
+//        let questionToBePosted = questions[i];
+       
+//        console.log(questionToBePosted)
+//         return questionToBePosted
+
+   }
+
+   console.log(questions)
+}
+postQuestions()
+
+// POTENTIAL ANSWERS - HOW TO SHUFFLE?
+
+//function postAlternatives()
 
 
 // ITERATION OVER API TO GET QUESTIONS
