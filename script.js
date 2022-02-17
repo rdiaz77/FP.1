@@ -10,54 +10,57 @@
 //     window.alert('Please enter your name')
 
 // }
-// SCIENCE
+ // GLOBAL VARIABLES
+var rightAnswer = null
 
-let category =  {
-    science: '22',
-    geography :'17'
-}
+
+// PLAYABLE SELECTION
+var playableCategory = '17'
+
+
+// TOPIC SELECTION SCIENCE
 
 var scienceButton = document.getElementById('science')
     scienceButton.addEventListener('click',function(){
-    console.log('you selected science', + category.science)
-    return category.science
-
+    console.log('you selected science')
+    let science = '17'
+    handledCategoryToPlay(science)
 })
 
-//GEOGRAPHY
 
-var geoCat = '22'
+// TOPIC SELECTION GEOGRAPHY
 var geographyButton = document.getElementById('geography')
-
 geographyButton.addEventListener('click',function(){
-    console.log('you selected science', + category.geography)
-    return category.geography
+    console.log('you selected geography')
+    let geoCat = '22'
+    handledCategoryToPlay(geoCat)
 })
-
+// FUNCTION TO SWITCH CATEGORY
+function handledCategoryToPlay(category){
+    playableCategory = category;
+}
 
 // OPTION BUTTONS
-
 var answer1 = document.getElementById('answer1')
 answer1.addEventListener('click',function(){
     console.log('you selected answer1')
     var getOption1 = document.getElementById('option1').innerHTML
-    console.log(getOption1)
-    return getOption1
-   
+    isRight(getOption1)
+  
 })
 
 var answer2 = document.getElementById('answer2')
 answer2.addEventListener('click',function(){
     console.log('you selected answer 2')
     var getOption2 = document.getElementById('option2').innerHTML
-    console.log(getOption2)
+    isRight(getOption2)
 })
 
 var answer3 = document.getElementById('answer3')
 answer3.addEventListener('click',function(){
     console.log('you selected answer 3')
     var getOption3 = document.getElementById('option3').innerHTML
-    console.log(getOption3)
+    isRight(getOption3)
   
 })
 
@@ -65,27 +68,12 @@ var answer4 = document.getElementById('answer4')
 answer4.addEventListener('click',function(){
     console.log('you selected answer 4');
     var getOption4 = document.getElementById('option4').innerHTML;
-    console.log(getOption4);
-    return getOption4;
+    isRight(getOption4)
   
 })
 
 
-
-//ADD PLAYER LOCATION
-
-function geoLocal(){
-    navigator.geolocation.getCurrentPosition(showPosition)
-}
-function showPosition(position){
-    let latitude = position.coords.latitude
-    let longitude = position.coords.longitude
-    let coordinates = [latitude, longitude]
-    console.log(coordinates)
-}
-
 // TIMER 
-
 let startTime = 10;
 let timer = document.getElementById('countdown');
     timer.innerHTML = startTime;
@@ -94,9 +82,27 @@ let handleClearInterval = (int) => clearInterval(int)
 let countDown = function(){
     startTime--;
     timer.innerHTML = startTime;
-    
 }
 
+// SCORE TRACKER
+let scoreBoard = document.getElementById('score')
+let initialScore = 0;
+scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
+let updateScore = function(){
+    initialScore += 1;
+    scoreBoard.innerHTML = `Your current Score is: ${initialScore}`;
+}
+
+// ERROR TRACKER
+
+let errorTracker = 3
+function handleErrorTracker(){
+    errorTracker -= 1;
+    if(errorTracker === 0){
+        window.alert('GAME OVER')
+    }
+
+}
 
 
 //PLAY BUTTON
@@ -109,8 +115,6 @@ playButton.addEventListener('click', function(){
         }
     
 })
-
-
 
 //RESET BUTTON
 
@@ -130,37 +134,42 @@ let nextBttn = document.getElementById('next')
         countArr += 1;
         postOptions();
         postQuestions();
-        var remove = document.getElementById()
-        
-   
-    })
+        var removeP = document.getElementById('para-1');
+        removeP.remove()
 
+    })
 
 // GET QUESTIONS FROM API
 
-let numOfQuestions = '30'
-let categorySelected = '17' // science 17 / geo 22
-let difficultyLevel = 'easy' // medium / hard
-const type = 'multiple'
-let encoding = ''
+var getDataObj = {
+    numOfQuestions: '30',
+    categorySelected: playableCategory, // science 17 / geo 22
+    difficultyLevel: 'easy',// medium / hard
+    type: 'multiple',
+}
+
+// let numOfQuestions = '30'
+// let categorySelected = '17' // science 17 / geo 22
+// let difficultyLevel = 'easy' // medium / hard
+// const type = 'multiple'
+
 
 //API ACCESS
- 
 
-async function getFetchQuestions(){
-    let request = await fetch(`https://opentdb.com/api.php?amount=${numOfQuestions}&category=${categorySelected}&difficulty=${difficultyLevel}&type=${type}`)
+ 
+async function getFetchQuestions(getDataObj){
+    console.log(getDataObj)
+    let request = await fetch(`https://opentdb.com/api.php?amount=${getDataObj.numOfQuestions}&category=${getDataObj.categorySelected}&difficulty=${getDataObj.difficultyLevel}&type=${getDataObj.type}`)
 
     let response = await request.json()
-    // console.log(response)
-//    console.log(response.results[0].question)
     return response.results // this is critical to get the data. 'response' is the main key of the object
 }
-getFetchQuestions()
+getFetchQuestions(getDataObj)
 
 // API ACCESS TO QUESTIONS / ALTERNATIVES / RIGHT ANSWER
 
 const returnFetchData = async() => {
-    const apiData = await getFetchQuestions();
+    const apiData = await getFetchQuestions(getDataObj);
    //console.log("this is the JS object =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
   
    return apiData.map(trivia => {
@@ -174,12 +183,11 @@ const returnFetchData = async() => {
     })
      
 }
-
-
 console.log(countArr)
 
 
-// ITERATION TO GET QUESTION
+// ITERATION TO GET QUESTIONS
+
 async function postQuestions(){
     let startQuestion = await returnFetchData()
     // console.log(startQuestion)
@@ -199,6 +207,7 @@ async function postOptions(){
 
     let options = await returnFetchData();
     let optionToBePostedRight = await options[countArr].receivedRightAnswer;
+    rightAnswer = optionToBePostedRight
     let optionToBePostedWr1 = await options[countArr].receiveWrongAnswer1;
     let optionToBePostedWr2 = await options[countArr].receivedWrongAnswer2;
     let optionToBePostedWr3 = await options[countArr].receivedWrongAnswer3;
@@ -211,28 +220,33 @@ async function postOptions(){
     let option4 = document.getElementById('option4');
     option4.innerHTML = optionToBePostedWr3
     console.log(optionToBePostedRight)
-    
 }
 
 postOptions()
 
 // RIGHT ANSWER
- function isRight(){
-     if(getOption4 === getOption1){
-         console.log('meh')
+function isRight(selectedOption){
+    if(selectedOption === rightAnswer){
+        updateScore();
+        
+    } else {
+        handleErrorTracker();
+        console.log('buuuuu')
+        console.log(errorTracker)
 
-     } else{
-         window.alert('uyuuuuuiiii')
-     }
+        
+    }
 
-
- }
-isRight()
+}
 
 
 // add a points counter
 
-
+a = multiply(2,3)
+console.log(a)
+function multiply(bus,car){
+   return bus * car
+}
 
 //request user name
 //dynamic change of the backgrounds
@@ -244,6 +258,15 @@ isRight()
 //add victory wound when completing the set of questions successfully
 //create a list of 10 higher 
 
-
+//ADD PLAYER LOCATION
+function geoLocal(){
+    navigator.geolocation.getCurrentPosition(showPosition)
+}
+function showPosition(position){
+    let latitude = position.coords.latitude
+    let longitude = position.coords.longitude
+    let coordinates = [latitude, longitude]
+    console.log(coordinates)
+}
 
 
