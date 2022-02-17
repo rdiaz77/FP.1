@@ -32,39 +32,45 @@ var geographyButton = document.getElementById('geography')
 geographyButton.addEventListener('click',function(){
     console.log('you selected science', + category.geography)
     return category.geography
-    
-
 })
 
 
-// ANSWERS 
+// OPTION BUTTONS
 
 var answer1 = document.getElementById('answer1')
-
 answer1.addEventListener('click',function(){
     console.log('you selected answer1')
+    var getOption1 = document.getElementById('option1').innerHTML
+    console.log(getOption1)
+    return getOption1
+   
 })
 
 var answer2 = document.getElementById('answer2')
-
 answer2.addEventListener('click',function(){
     console.log('you selected answer 2')
+    var getOption2 = document.getElementById('option2').innerHTML
+    console.log(getOption2)
+})
+
+var answer3 = document.getElementById('answer3')
+answer3.addEventListener('click',function(){
+    console.log('you selected answer 3')
+    var getOption3 = document.getElementById('option3').innerHTML
+    console.log(getOption3)
   
 })
 
 var answer4 = document.getElementById('answer4')
-
 answer4.addEventListener('click',function(){
-    console.log('you selected answer 4')
+    console.log('you selected answer 4');
+    var getOption4 = document.getElementById('option4').innerHTML;
+    console.log(getOption4);
+    return getOption4;
   
 })
 
-var answer3 = document.getElementById('answer3')
 
-answer3.addEventListener('click',function(){
-    console.log('you selected answer 3')
-  
-})
 
 //ADD PLAYER LOCATION
 
@@ -114,10 +120,20 @@ let resetButton = document.getElementById('reset')
         startTime = 10;
         timer.innerHTML = startTime;
         //handleClearInterval(interval)
-
-
 })
-// NUMBER OF QUESTIONS
+
+// NEXT BUTTON
+var countArr = 0
+
+let nextBttn = document.getElementById('next')
+    nextBttn.addEventListener('click', function(){
+        countArr += 1;
+        postOptions();
+        postQuestions();
+        var remove = document.getElementById()
+        
+   
+    })
 
 
 // GET QUESTIONS FROM API
@@ -154,24 +170,23 @@ const returnFetchData = async() => {
             receiveWrongAnswer1: trivia.incorrect_answers[0],
             receivedWrongAnswer2: trivia.incorrect_answers[1],
             receivedWrongAnswer3: trivia.incorrect_answers[2]
-        }
-
-    
+        }  
     })
      
 }
-//returnFetchData()
-var count = 2
 
 
+console.log(countArr)
 
-// INITIAL QUESTION
+
+// ITERATION TO GET QUESTION
 async function postQuestions(){
     let startQuestion = await returnFetchData()
     // console.log(startQuestion)
-    let questionToBePosted = await startQuestion[count].receivedQuestions;
+    let questionToBePosted = await startQuestion[countArr].receivedQuestions;
     let questionContainer = document.getElementById('question')
     let questionPElement = document.createElement('p')
+    questionPElement.setAttribute('id','para-1')
     questionPElement.innerHTML = questionToBePosted;
     questionContainer.append(questionPElement)
   }
@@ -183,10 +198,10 @@ postQuestions()
 async function postOptions(){
 
     let options = await returnFetchData();
-    let optionToBePostedRight = await options[count].receivedRightAnswer;
-    let optionToBePostedWr1 = await options[count].receiveWrongAnswer1;
-    let optionToBePostedWr2 = await options[count].receivedWrongAnswer2;
-    let optionToBePostedWr3 = await options[count].receivedWrongAnswer3;
+    let optionToBePostedRight = await options[countArr].receivedRightAnswer;
+    let optionToBePostedWr1 = await options[countArr].receiveWrongAnswer1;
+    let optionToBePostedWr2 = await options[countArr].receivedWrongAnswer2;
+    let optionToBePostedWr3 = await options[countArr].receivedWrongAnswer3;
     let option1 = document.getElementById('option1');
     option1.innerHTML = optionToBePostedRight
     let option2 = document.getElementById('option2');
@@ -196,18 +211,23 @@ async function postOptions(){
     let option4 = document.getElementById('option4');
     option4.innerHTML = optionToBePostedWr3
     console.log(optionToBePostedRight)
-
-
+    
 }
 
 postOptions()
-//function postAlternatives()
+
+// RIGHT ANSWER
+ function isRight(){
+     if(getOption4 === getOption1){
+         console.log('meh')
+
+     } else{
+         window.alert('uyuuuuuiiii')
+     }
 
 
-// ITERATION OVER API TO GET QUESTIONS
-
-
-
+ }
+isRight()
 
 
 // add a points counter
