@@ -11,22 +11,17 @@
 
 // }
  // GLOBAL VARIABLES
-var rightAnswer = null
-
-
-// PLAYABLE SELECTION
-var playableCategory = '17'
-
+var rightAnswer = null      // RIGHT ANSWER
+var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
 
 // TOPIC SELECTION SCIENCE
-
 var scienceButton = document.getElementById('science')
     scienceButton.addEventListener('click',function(){
     console.log('you selected science')
     let science = '17'
     handledCategoryToPlay(science)
+    getFetchQuestions(getDataObj)
 })
-
 
 // TOPIC SELECTION GEOGRAPHY
 var geographyButton = document.getElementById('geography')
@@ -34,10 +29,14 @@ geographyButton.addEventListener('click',function(){
     console.log('you selected geography')
     let geoCat = '22'
     handledCategoryToPlay(geoCat)
+    getFetchQuestions(getDataObj)
+
 })
+
 // FUNCTION TO SWITCH CATEGORY
 function handledCategoryToPlay(category){
     playableCategory = category;
+    getDataObj.categorySelected = playableCategory;
 }
 
 // OPTION BUTTONS
@@ -61,15 +60,13 @@ answer3.addEventListener('click',function(){
     console.log('you selected answer 3')
     var getOption3 = document.getElementById('option3').innerHTML
     isRight(getOption3)
-  
 })
 
 var answer4 = document.getElementById('answer4')
 answer4.addEventListener('click',function(){
     console.log('you selected answer 4');
     var getOption4 = document.getElementById('option4').innerHTML;
-    isRight(getOption4)
-  
+    isRight(getOption4) 
 })
 
 
@@ -78,7 +75,7 @@ let startTime = 10;
 let timer = document.getElementById('countdown');
     timer.innerHTML = startTime;
 
-let handleClearInterval = (int) => clearInterval(int)
+
 let countDown = function(){
     startTime--;
     timer.innerHTML = startTime;
@@ -94,14 +91,12 @@ let updateScore = function(){
 }
 
 // ERROR TRACKER
-
 let errorTracker = 3
 function handleErrorTracker(){
     errorTracker -= 1;
     if(errorTracker === 0){
         window.alert('GAME OVER')
     }
-
 }
 
 
@@ -113,11 +108,9 @@ playButton.addEventListener('click', function(){
     if(startTime === 0){
         handleClearInterval(interval)
         }
-    
 })
 
 //RESET BUTTON
-
 let resetButton = document.getElementById('reset')
     resetButton.addEventListener('click', function(){
         console.log('reset')
@@ -128,19 +121,18 @@ let resetButton = document.getElementById('reset')
 
 // NEXT BUTTON
 var countArr = 0
-
 let nextBttn = document.getElementById('next')
     nextBttn.addEventListener('click', function(){
         countArr += 1;
         postOptions();
         postQuestions();
-        var removeP = document.getElementById('para-1');
+        let removeP = document.getElementById('para-1');
         removeP.remove()
+        removeMessageToPlayer()
 
     })
 
 // GET QUESTIONS FROM API
-
 var getDataObj = {
     numOfQuestions: '30',
     categorySelected: playableCategory, // science 17 / geo 22
@@ -155,8 +147,6 @@ var getDataObj = {
 
 
 //API ACCESS
-
- 
 async function getFetchQuestions(getDataObj){
     console.log(getDataObj)
     let request = await fetch(`https://opentdb.com/api.php?amount=${getDataObj.numOfQuestions}&category=${getDataObj.categorySelected}&difficulty=${getDataObj.difficultyLevel}&type=${getDataObj.type}`)
@@ -187,7 +177,6 @@ console.log(countArr)
 
 
 // ITERATION TO GET QUESTIONS
-
 async function postQuestions(){
     let startQuestion = await returnFetchData()
     // console.log(startQuestion)
@@ -202,7 +191,6 @@ postQuestions()
 
 
 // POTENTIAL ANSWERS - HOW TO SHUFFLE?
-
 async function postOptions(){
 
     let options = await returnFetchData();
@@ -228,19 +216,45 @@ postOptions()
 function isRight(selectedOption){
     if(selectedOption === rightAnswer){
         updateScore();
+        let successMessage ='Great Answer'
+        postMessageToPlayer(successMessage)
+    
         
     } else {
         handleErrorTracker();
+        let badMessage = `Wow!!! that's wrong`
+        postMessageToPlayer(badMessage)
         console.log('buuuuu')
-        console.log(errorTracker)
-
-        
+        console.log(errorTracker)      
     }
-
 }
 
+// MESSAGE TO PLAYER
+let postMessageToPlayer = function(message){
+    let messageToPlayer = document.getElementById('message-player');
+    let messageElement = document.createElement('p');
+    messageElement.setAttribute('id', 'showMessage')
+    messageElement.innerHTML = message;
+    messageToPlayer.append(messageElement);
+}
+// RESET MESSAGE TO PLAYER
+function removeMessageToPlayer(){
+    let removeMessage = document.getElementById('showMessage')
+    removeMessage.remove();
 
-// add a points counter
+
+}
+postMessageToPlayer()
+
+
+
+
+
+
+
+
+
+
 
 a = multiply(2,3)
 console.log(a)
