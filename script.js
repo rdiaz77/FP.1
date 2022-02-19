@@ -13,6 +13,7 @@
  // GLOBAL VARIABLES
 var rightAnswer = null      // RIGHT ANSWER
 var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
+var timerInterval = null
 
 // TOPIC SELECTION SCIENCE
 var scienceButton = document.getElementById('science')
@@ -30,7 +31,6 @@ geographyButton.addEventListener('click',function(){
     let geoCat = '22'
     handledCategoryToPlay(geoCat)
     getFetchQuestions(getDataObj)
-
 })
 
 // FUNCTION TO SWITCH CATEGORY
@@ -45,7 +45,6 @@ answer1.addEventListener('click',function(){
     console.log('you selected answer1')
     var getOption1 = document.getElementById('option1').innerHTML
     isRight(getOption1)
-  
 })
 
 var answer2 = document.getElementById('answer2')
@@ -69,20 +68,8 @@ answer4.addEventListener('click',function(){
     isRight(getOption4) 
 })
 
-
-// TIMER 
-let startTime = 10;
-let timer = document.getElementById('countdown');
-    timer.innerHTML = startTime;
-
-
-let countDown = function(){
-    startTime--;
-    timer.innerHTML = startTime;
-}
-
 // SCORE TRACKER
-let scoreBoard = document.getElementById('score')
+let scoreBoard = document.getElementById('score');
 let initialScore = 0;
 scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
 let updateScore = function(){
@@ -90,60 +77,70 @@ let updateScore = function(){
     scoreBoard.innerHTML = `Your current Score is: ${initialScore}`;
 }
 
-// ERROR TRACKER
-let errorTracker = 3
-function handleErrorTracker(){
-    errorTracker -= 1;
-    if(errorTracker === 0){
-        window.alert('GAME OVER')
-    }
+
+
+// TIMER 
+let startTime = 10;
+let timer = document.getElementById('countdown');
+    timer.innerHTML = startTime;
+
+let countDown = function(){  // COUNTDOWN
+    startTime--;
+    timer.innerHTML = startTime;
+    if(startTime === -1){
+            stopTimer(timerInterval)
+            timer.innerHTML ='0';
+            window.alert('TIME IS UP')
+        }
+}
+
+function stopTimer(int){ // STOP TIMER
+    clearInterval(int);
 }
 
 
-//PLAY BUTTON
+// PLAY BUTTON
 let playButton = document.getElementById('start')
 playButton.addEventListener('click', function(){
-    let interval = setInterval(countDown, 1000);
-    interval;
-    if(startTime === 0){
-        handleClearInterval(interval)
-        }
+    timerInterval = setInterval(countDown, 1000);
+    getFetchQuestions(getDataObj)
+    postQuestions()
+    postOptions()
+    errorTracker = 0;
+
 })
 
-//RESET BUTTON
+// RESET BUTTON
 let resetButton = document.getElementById('reset')
     resetButton.addEventListener('click', function(){
-        console.log('reset')
+        stopTimer(timerInterval); 
         startTime = 10;
         timer.innerHTML = startTime;
-        //handleClearInterval(interval)
+        initialScore = 0
+        scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
+
 })
 
 // NEXT BUTTON
 var countArr = 0
-let nextBttn = document.getElementById('next')
-    nextBttn.addEventListener('click', function(){
+let nextButton = document.getElementById('next')
+    nextButton.addEventListener('click', function(){
         countArr += 1;
+        timerInterval = setInterval(countDown, 1000);
         postOptions();
         postQuestions();
-        let removeP = document.getElementById('para-1');
-        removeP.remove()
-        removeMessageToPlayer()
-
+        removeOldQuestion();   
     })
 
 // GET QUESTIONS FROM API
 var getDataObj = {
-    numOfQuestions: '30',
+    numOfQuestions: '30',   // let numOfQuestions = '30'
     categorySelected: playableCategory, // science 17 / geo 22
     difficultyLevel: 'easy',// medium / hard
     type: 'multiple',
 }
 
-// let numOfQuestions = '30'
-// let categorySelected = '17' // science 17 / geo 22
-// let difficultyLevel = 'easy' // medium / hard
-// const type = 'multiple'
+
 
 
 //API ACCESS
@@ -152,9 +149,9 @@ async function getFetchQuestions(getDataObj){
     let request = await fetch(`https://opentdb.com/api.php?amount=${getDataObj.numOfQuestions}&category=${getDataObj.categorySelected}&difficulty=${getDataObj.difficultyLevel}&type=${getDataObj.type}`)
 
     let response = await request.json()
-    return response.results // this is critical to get the data. 'response' is the main key of the object
+    return response.results // this is critical to get the data. 'response' is the main key of the API object
 }
-getFetchQuestions(getDataObj)
+
 
 // API ACCESS TO QUESTIONS / ALTERNATIVES / RIGHT ANSWER
 
@@ -170,8 +167,7 @@ const returnFetchData = async() => {
             receivedWrongAnswer2: trivia.incorrect_answers[1],
             receivedWrongAnswer3: trivia.incorrect_answers[2]
         }  
-    })
-     
+    })  
 }
 console.log(countArr)
 
@@ -187,7 +183,13 @@ async function postQuestions(){
     questionPElement.innerHTML = questionToBePosted;
     questionContainer.append(questionPElement)
   }
-postQuestions()
+// REMOVE OLD QUESTION
+function removeOldQuestion(){
+    let removeP = document.getElementById('para-1');
+removeP.remove()
+removeMessageToPlayer()
+}
+
 
 
 // POTENTIAL ANSWERS - HOW TO SHUFFLE?
@@ -210,7 +212,7 @@ async function postOptions(){
     console.log(optionToBePostedRight)
 }
 
-postOptions()
+
 
 // RIGHT ANSWER
 function isRight(selectedOption){
@@ -218,6 +220,7 @@ function isRight(selectedOption){
         updateScore();
         let successMessage ='Great Answer'
         postMessageToPlayer(successMessage)
+        stopTimer(timerInterval); 
     
         
     } else {
@@ -225,9 +228,21 @@ function isRight(selectedOption){
         let badMessage = `Wow!!! that's wrong`
         postMessageToPlayer(badMessage)
         console.log('buuuuu')
-        console.log(errorTracker)      
+        console.log(errorTracker)
+        stopTimer(timerInterval);       
     }
 }
+// ERROR TRACKER
+let errorTracker = 3
+function handleErrorTracker(){
+    errorTracker -= 1;
+    if(errorTracker === 0){
+        window.alert('GAME OVER')
+    }
+}
+
+// ERROR CRUX GENERATION
+
 
 // MESSAGE TO PLAYER
 let postMessageToPlayer = function(message){
@@ -244,33 +259,16 @@ function removeMessageToPlayer(){
 
 
 }
-postMessageToPlayer()
 
 
-
-
-
-
-
-
-
-
-
-a = multiply(2,3)
-console.log(a)
-function multiply(bus,car){
-   return bus * car
-}
-
-//request user name
-//dynamic change of the backgrounds
+// dynamic change of the backgrounds
 // dynamic change of background music
 // add crash sound when wrong
-//add positive sound when right
+// add positive sound when right
 // add final sound when time's up 
 // add final sound when game finishes
-//add victory wound when completing the set of questions successfully
-//create a list of 10 higher 
+// add victory wound when completing the set of questions successfully
+// create a list of 10 higher 
 
 //ADD PLAYER LOCATION
 function geoLocal(){
