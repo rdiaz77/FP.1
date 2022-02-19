@@ -1,19 +1,20 @@
 
-//let person = prompt('Please enter your name: ')
-// is JS working...
+// let person = prompt('Please enter your name: ')
 
-//if (person!= null){
+// if (person!= null){
 
 //     var userName = document.getElementById('user-name')
 //     userName.innerHTML = `Welcome to the Trivia Game ${person}`
 // } else {
 //     window.alert('Please enter your name')
+    
 
 // }
  // GLOBAL VARIABLES
 var rightAnswer = null      // RIGHT ANSWER
 var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
 var timerInterval = null
+var countArr = '4'
 
 // TOPIC SELECTION SCIENCE
 var scienceButton = document.getElementById('science')
@@ -38,38 +39,41 @@ function handledCategoryToPlay(category){
     playableCategory = category;
     getDataObj.categorySelected = playableCategory;
 }
+// SWITCH ARRAY #
+
+
+
+
+
 
 // OPTION BUTTONS
 var answer1 = document.getElementById('answer1')
 answer1.addEventListener('click',function(){
-    console.log('you selected answer1')
     var getOption1 = document.getElementById('option1').innerHTML
     isRight(getOption1)
 })
 
 var answer2 = document.getElementById('answer2')
 answer2.addEventListener('click',function(){
-    console.log('you selected answer 2')
     var getOption2 = document.getElementById('option2').innerHTML
     isRight(getOption2)
 })
 
 var answer3 = document.getElementById('answer3')
 answer3.addEventListener('click',function(){
-    console.log('you selected answer 3')
     var getOption3 = document.getElementById('option3').innerHTML
     isRight(getOption3)
 })
 
 var answer4 = document.getElementById('answer4')
 answer4.addEventListener('click',function(){
-    console.log('you selected answer 4');
     var getOption4 = document.getElementById('option4').innerHTML;
     isRight(getOption4) 
 })
 
 // SCORE TRACKER
 let scoreBoard = document.getElementById('score');
+scoreBoard.style.color = 'black'
 let initialScore = 0;
 scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
 let updateScore = function(){
@@ -77,21 +81,22 @@ let updateScore = function(){
     scoreBoard.innerHTML = `Your current Score is: ${initialScore}`;
 }
 
-
-
 // TIMER 
 let startTime = 10;
 let timer = document.getElementById('countdown');
-    timer.innerHTML = startTime;
+    timer.style.color = 'black'
+    timer.innerHTML = `Your have ${startTime} sec`;
 
-let countDown = function(){  // COUNTDOWN
+function countDown(){
     startTime--;
-    timer.innerHTML = startTime;
-    if(startTime === -1){
-            stopTimer(timerInterval)
-            timer.innerHTML ='0';
-            window.alert('TIME IS UP')
-        }
+    timer.innerHTML = `Remaining time ${startTime}`
+    if(startTime === 0){
+        window.alert('Time is UP!!!');
+        stopTimer(setInterval);
+        startTime = 0;
+        timer.innerHTML = `Your have ${startTime} sec` 
+    }
+
 }
 
 function stopTimer(int){ // STOP TIMER
@@ -102,11 +107,13 @@ function stopTimer(int){ // STOP TIMER
 // PLAY BUTTON
 let playButton = document.getElementById('start')
 playButton.addEventListener('click', function(){
-    timerInterval = setInterval(countDown, 1000);
+    countArr = 0
     getFetchQuestions(getDataObj)
     postQuestions()
     postOptions()
     errorTracker = 0;
+    document.querySelector('#start').disable = true;
+   
 
 })
 
@@ -115,21 +122,22 @@ let resetButton = document.getElementById('reset')
     resetButton.addEventListener('click', function(){
         stopTimer(timerInterval); 
         startTime = 10;
-        timer.innerHTML = startTime;
+        timer.innerHTML = `Your time is ${startTime} sec`;
         initialScore = 0
-        scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
+        scoreBoard.innerHTML = `Your Score is: ${initialScore}`
 
 })
 
 // NEXT BUTTON
-var countArr = 0
+
 let nextButton = document.getElementById('next')
     nextButton.addEventListener('click', function(){
-        countArr += 1;
-        timerInterval = setInterval(countDown, 1000);
+        countArr++;
+        console.log(countArr)
         postOptions();
         postQuestions();
-        removeOldQuestion();   
+        console.log(countArr);
+        removeOldQuestion(); 
     })
 
 // GET QUESTIONS FROM API
@@ -140,16 +148,14 @@ var getDataObj = {
     type: 'multiple',
 }
 
-
-
-
 //API ACCESS
 async function getFetchQuestions(getDataObj){
-    console.log(getDataObj)
+    //console.log(getDataObj)
     let request = await fetch(`https://opentdb.com/api.php?amount=${getDataObj.numOfQuestions}&category=${getDataObj.categorySelected}&difficulty=${getDataObj.difficultyLevel}&type=${getDataObj.type}`)
 
     let response = await request.json()
     return response.results // this is critical to get the data. 'response' is the main key of the API object
+    
 }
 
 
@@ -163,14 +169,14 @@ const returnFetchData = async() => {
         return {
             receivedQuestions: trivia.question,
             receivedRightAnswer: trivia.correct_answer,
-            receiveWrongAnswer1: trivia.incorrect_answers[0],
+            receivedWrongAnswer1: trivia.incorrect_answers[0],
             receivedWrongAnswer2: trivia.incorrect_answers[1],
             receivedWrongAnswer3: trivia.incorrect_answers[2]
         }  
     })  
 }
 console.log(countArr)
-
+console.log(returnFetchData())
 
 // ITERATION TO GET QUESTIONS
 async function postQuestions(){
@@ -180,9 +186,16 @@ async function postQuestions(){
     let questionContainer = document.getElementById('question')
     let questionPElement = document.createElement('p')
     questionPElement.setAttribute('id','para-1')
+    questionPElement.style.color = 'white'
+    questionPElement.style.fontSize = '20px'
+    questionPElement.style.textAlign = 'center'
     questionPElement.innerHTML = questionToBePosted;
     questionContainer.append(questionPElement)
+    console.log(questionToBePosted)
+    console.log(countArr)
   }
+
+
 // REMOVE OLD QUESTION
 function removeOldQuestion(){
     let removeP = document.getElementById('para-1');
@@ -190,15 +203,13 @@ removeP.remove()
 removeMessageToPlayer()
 }
 
-
-
 // POTENTIAL ANSWERS - HOW TO SHUFFLE?
 async function postOptions(){
 
     let options = await returnFetchData();
     let optionToBePostedRight = await options[countArr].receivedRightAnswer;
     rightAnswer = optionToBePostedRight
-    let optionToBePostedWr1 = await options[countArr].receiveWrongAnswer1;
+    let optionToBePostedWr1 = await options[countArr].receivedWrongAnswer1;
     let optionToBePostedWr2 = await options[countArr].receivedWrongAnswer2;
     let optionToBePostedWr3 = await options[countArr].receivedWrongAnswer3;
     let option1 = document.getElementById('option1');
@@ -210,9 +221,11 @@ async function postOptions(){
     let option4 = document.getElementById('option4');
     option4.innerHTML = optionToBePostedWr3
     console.log(optionToBePostedRight)
+    console.log(optionToBePostedWr1)
+    console.log(optionToBePostedWr2)
+    console.log(optionToBePostedWr3)
 }
-
-
+console.log(postOptions())
 
 // RIGHT ANSWER
 function isRight(selectedOption){
@@ -221,6 +234,7 @@ function isRight(selectedOption){
         let successMessage ='Great Answer'
         postMessageToPlayer(successMessage)
         stopTimer(timerInterval); 
+        setTimeout(removeMessageToPlayer, 1500)
     
         
     } else {
@@ -229,7 +243,8 @@ function isRight(selectedOption){
         postMessageToPlayer(badMessage)
         console.log('buuuuu')
         console.log(errorTracker)
-        stopTimer(timerInterval);       
+        stopTimer(timerInterval);  
+        setTimeout(removeMessageToPlayer, 1500)     
     }
 }
 // ERROR TRACKER
@@ -237,18 +252,29 @@ let errorTracker = 3
 function handleErrorTracker(){
     errorTracker -= 1;
     if(errorTracker === 0){
-        window.alert('GAME OVER')
+        window.alert('GAME OVER'); 
+        resetButton()
     }
+    cruxGeneration()
 }
 
 // ERROR CRUX GENERATION
+let cruxGeneration = function(){
+    let cruxMaker = document.getElementById('error-crux')
+    cruxMaker.style.color = 'black'
+    cruxMaker.innerHTML = 'X'
+    console.log('it works')
+}
 
 
 // MESSAGE TO PLAYER
 let postMessageToPlayer = function(message){
     let messageToPlayer = document.getElementById('message-player');
     let messageElement = document.createElement('p');
-    messageElement.setAttribute('id', 'showMessage')
+    messageElement.setAttribute('id', 'showMessage');
+    messageElement.style.color = 'white'
+    messageElement.style.fontSize = '20px'
+    messageElement.style.position = 'center'
     messageElement.innerHTML = message;
     messageToPlayer.append(messageElement);
 }

@@ -1,54 +1,141 @@
+body{
 
+    background-image: url(./images/Red\ Yellow\ Circles\ Trivia\ Day\ Presentation.jpg);
+    background-repeat: no-repeat;
+    background-color: #fff;
+    background-position-x: center;
+    height: 90%;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid black;
 
-/* create navigation button for main topics*/
+}
 
-ul {
-
-    list-style-type: none;
-    margin: 1em;
+/* Play / Next / Reset Buttons */
+.button{
     padding: 0;
-    
+    margin-top: 5px;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    left: 570px;
+    position: relative;
+    border: none;
+    border-radius: 3px;
+    transition-duration: 0.5s;
 
 }
 
-.boxes li{
-    display: inline;
-    background-color: white;
-    border: solid 1px black;
-    padding: 10px 25px;
-    border: solid black 1px;
-    
-
-
+.button:hover{
+    background-color: coral;
+    box-shadow: 0px 5px 10px black;
+    transform: scale(.95);
 }
 
-button:hover {
 
-    background-color: burlywood;
+/* Science - GEO button */
+.topics:hover{
+    background-color: coral;
+    box-shadow: 0px 5px 10px black;
+    transform: scale(.95);
+    position: relative;
+    top: auto;
+    
 }
 
-.answer-box li{
-    border: solid black 1px;
-    display: inline;
-    
-    
-
+.topics{
+    padding: 0;
+    margin:0;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    position: relative;
+    left: 350px;
+    border: none;
+    border-radius: 3px;
+    transition-duration: 0.5s;
 
 }
+/* Answer Buttons - buttons style */
+
+.option-bttn:hover{
+    background-color: violet;
+    box-shadow: 0px 5px 10px black;
+    transform: scale(.95);
+}
+.option-bttn{
+    padding: 0;
+    margin:20px;
+    width: 250px;
+    height: 80px;
+    text-align: center;
+    position: relative;
+    border: none;
+    border-radius: 3px;
+    transition-duration: 0.5s;
+}
+/* Answer Buttons - Alignment*/
 
 .answer-box{
+    position: relative;
+    height: auto;
+    width: auto;
     border: solid blue 1px;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    align-content: flex-start;
-    flex-grow: 4;
-    
-    
-   
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
 
 }
+/* Tracker buttons */
+.trackers{
+    width: 500px;
+    position: relative;
+    top: 90px;
+    border: 1px solid black;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+   
+
+   
+}
+#score{
+    border: 2px solid white;
+    height: auto;padding: 0;
+    margin:5px;
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: whitesmoke;
+}
+#error-crux{
+    border: 2px solid white;
+    height: auto;padding: 0;
+    margin:5px;
+    width: 150px;
+    height: 30px;
+    text-align:center;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    
+}
+
+#countdown{
+    border: 2px solid white;
+    height: auto;padding: 0;
+    margin:5px;
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: whitesmoke;
+   
+}
+
+/* Dropdown button for selection # Questions */
 
 .dropbutton {
     background-color: #3498DB;
@@ -59,8 +146,23 @@ button:hover {
     cursor: pointer;
   }
 
-/* add main background and switch background based on topics */
+/* USER */
+#user-name{
+    color: white;
+    font-size: 20px;
+    position: fixed;
+    top: 200px;
+    left: 890px;
 
-/* format answers boxes */
+}
 
-/* add hoover to answers and topics */
+/* SELECTION # of Questions */
+.dropdown-list{
+    width: fit-content;
+    
+
+
+}
+
+/* FOOTER */
+

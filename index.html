@@ -8,41 +8,40 @@
     <link rel="stylesheet" href="style.css">
     <title>Trivia Game</title>
 </head>
-<body>
+<body id='content'>
 
-    <head id='game-title'><h1>This is a Trivia Game</h1></head>
-    
-    <div id='user-name'>hola</div>   
+    <div id='user-name'></div>   
     <!-- MESSAGE TO USER -->
     <div id= 'message-player'></div>
+
+    <!-- GAME TRACKERS -->
+    <div class='trackers'> 
+        <p id ='countdown'>sin numero</p>
+        <!-- <div id='timer'></div> -->
+        <div id='score'></div>
+        <div id='error-crux'>XXX</div>
+    </div>
+    <!-- TOPICS SELECTION BUTTONS -->
     <nav class='boxes'>
         
         <button class = 'topics' id='science' type="button">Science</button>
         <button class = 'topics' id='geography' type="button">Geography</button>
+        <!-- NUMBER OF QUESTIONS SELECTION  -->
+        <select name='numberOfQuestions' class = 'topics' id ='dropdown-list'>
+            <option value="0">Question #</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select>
         
     </nav>
-    
-
-     <!-- NUMBER OF QUESTIONS SELECTION  -->
-    <select name='numberOfQuestions' id ='dropdown-list'>
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="30">30</option>
-    </select>
-
-    <p id ='countdown'>sin numero</p>
-
-   
-    <div id='timer'></div>
-    <div id='score'></div>
-    <div id='error-crux'></div>
-   
 
     <!-- PLAY / NEXT / RESET BUTTONS -->
-    <button id='start' type="button">Play</button>
-    <button id='next' type="button">Next</button>
-    <button id='reset' type="button">Reset</button>
-    
+    <button id='start' class = 'button' type="button">Play</button>
+    <button id='next'  class = 'button' type="button">Next</button>
+    <button id='reset' class = 'button' type="button">Reset</button>
+    <br><br>
+
     <!-- QUESTIONS && ANSWERS -->
     <div id='question'></div>
 
@@ -62,7 +61,7 @@
 
     <footer>
 
-        <p><h5>Images from: </h5></p>
+        <p><h5>Images from://canva.com </h5></p>
 
 
     </footer> 
