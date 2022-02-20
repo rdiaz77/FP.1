@@ -16,6 +16,7 @@ var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
 var playableQuestions = '10'
 var playableLevel = 'easy'
 
+
 var countArr = '0'
 
 // TOPIC SELECTION SCIENCE
@@ -64,6 +65,13 @@ function handleNumberOfQuestionsToPlay(num){
 let levelArr = ['easy', 'medium', 'hard']
 
 function updateDifficultyLevel(){
+    if(initialScore === 3){
+        playableLevel = 'medium'
+        getDataObj.difficultyLevel = playableLevel;
+    } else if(initialScore === 7){
+        playableLevel = 'hard'
+        getDataObj.difficultyLevel = playableLevel;
+    }
 }
 
 
@@ -94,16 +102,22 @@ answer4.addEventListener('click',function(){
 })
 
 // SCORE TRACKER
+var initialScore = 0;
 let scoreBoard = document.getElementById('score');
 scoreBoard.style.color = 'black'
-let initialScore = 0;
 scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
+
 let updateScore = function(){
     initialScore += 1;
     scoreBoard.innerHTML = `Your current Score is: ${initialScore}`;
+    updateDifficultyLevel();
+    console.log(playableLevel)
+    console.log(getDataObj)
+    
 }
 
-// TIMER var timerInterval = null
+
+// TIMER 
 var timerInterval = null
 let startTime = 10;
 let timer = document.getElementById('countdown');
@@ -232,8 +246,7 @@ async function postQuestions(){
 // REMOVE OLD QUESTION
 function removeOldQuestion(){
     let removeP = document.getElementById('para-1');
-removeP.remove()
-removeMessageToPlayer()
+    removeP.remove()
 }
 
 // POTENTIAL ANSWERS - HOW TO SHUFFLE?
