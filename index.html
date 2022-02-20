@@ -8,63 +8,74 @@
     <link rel="stylesheet" href="style.css">
     <title>Trivia Game</title>
 </head>
-<body id='content'>
+<body>
+    <div id='content'>
 
-    <div id='user-name'></div>   
-    <!-- MESSAGE TO USER -->
-    <div id= 'message-player'></div>
+        <section class ='clock'>
+             <p id ='countdown'>sin numero</p>
+        </section>
+        <!-- MESSAGE TO USER AND NAME -->
+        <Section class = 'user-data'>
 
-    <!-- GAME TRACKERS -->
-    <div class='trackers'> 
-        <p id ='countdown'>sin numero</p>
-        <!-- <div id='timer'></div> -->
-        <div id='score'></div>
-        <div id='error-crux'>XXX</div>
-    </div>
-    <!-- TOPICS SELECTION BUTTONS -->
-    <nav class='boxes'>
+             <div id='user-name'>RAFA</div>   
+             <div id= 'message-player'></div>
+      
+        </Section>
+       
+        <!-- GAME TRACKERS -->
+        <div class='trackers-container'> 
+            <div id='score'></div>
+            <div id='error-crux'>XXX</div>
+        </div>
+
+        <!-- TOPICS SELECTION BUTTONS -->
+       
+        <nav class='topics-container'>
+            
+            <button class = 'topics' id='science' type="button">Science</button>
+            <button class = 'topics' id='geography' type="button">Geography</button>
+            <select name='numberOfQuestions' class = 'topics' id ='dropdown-list'>
+                <option value="0">Question #</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+            </select>
+            
+        </nav>
         
-        <button class = 'topics' id='science' type="button">Science</button>
-        <button class = 'topics' id='geography' type="button">Geography</button>
-        <!-- NUMBER OF QUESTIONS SELECTION  -->
-        <select name='numberOfQuestions' class = 'topics' id ='dropdown-list'>
-            <option value="0">Question #</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-        </select>
+        <!-- PLAY / NEXT / RESET BUTTONS -->
+        <section class = 'controls-container'>
+            <button id='start' class = 'button' type="button">Play</button>
+            <button id='next'  class = 'button' type="button">Next</button>
+            <button id='reset' class = 'button' type="button">Reset</button>
+        </section>
         
-    </nav>
+        <br>
 
-    <!-- PLAY / NEXT / RESET BUTTONS -->
-    <button id='start' class = 'button' type="button">Play</button>
-    <button id='next'  class = 'button' type="button">Next</button>
-    <button id='reset' class = 'button' type="button">Reset</button>
-    <br><br>
+        <!-- QUESTIONS && ANSWERS -->
+        <div id='question'>QUESTIONS GO HERE</div>
 
-    <!-- QUESTIONS && ANSWERS -->
-    <div id='question'></div>
+        <section class='answer-container'>
 
-    <section class='answer-box'>
+            <button id ='answer1' class='option-bttn' type="button"><p id='option1'>option 1</p></button>
+            <button id ='answer2' class='option-bttn' type="button"><p id='option2'>option 2</p></button>
+            <button id ='answer3' class='option-bttn' type="button"><p id='option3'>option 3</p></button>
+            <button id ='answer4' class='option-bttn' type="button"><p id='option4'>option 4</p></button>
 
-        <button id ='answer1' class='option-bttn' type="button"><p id='option1'>option 1</p></button>
-        <button id ='answer2' class='option-bttn' type="button"><p id='option2'>option 2</p></button>
-        <button id ='answer3' class='option-bttn' type="button"><p id='option3'>option 3</p></button>
-        <button id ='answer4' class='option-bttn' type="button"><p id='option4'>option 4</p></button>
+        </section>
 
-    </section>
+        <!-- <img id='background' src="" alt=""> -->
 
-    <!-- <img id='background' src="" alt=""> -->
-
-    
+        
 
 
-    <footer>
+        <footer>
 
-        <p><h5>Images from://canva.com </h5></p>
+            <p><h5>Images from://canva.com </h5></p>
 
 
-    </footer> 
-    <script src="script.js"></script>
+        </footer> 
+        <script src="script.js"></script>
+    </div>    
 </body>
 </html>
