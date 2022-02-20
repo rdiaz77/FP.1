@@ -115,9 +115,18 @@ function timerCountDown (){
         timer.innerHTML = `Remaining time: ${startTime}`;
         console.log('timer')
         if(startTime === 0){
-            resetTimer(timerCountDown)
+           clearInterval(timerInterval)
+           setTimeout(() => { 
+            startTime = 10;
+            timer.innerHTML = `Your time is ${startTime} sec` }, 1500);
+            window.alert('Your time is up!!! ... Sorry you lose')
+            
         } 
 };
+
+function stopTimer(int){
+    clearInterval(int)
+}
 
 function resetTimer(int){
     clearInterval(int)
@@ -128,9 +137,9 @@ function resetTimer(int){
 function resetTrackers(){
     countArr = 0;
     errorTracker = 0;
-    
     initialScore = 0
     scoreBoard.innerHTML = `Your Score is: ${initialScore}`
+ 
 }
 
 // PLAY BUTTON
@@ -156,11 +165,11 @@ let resetButton = document.getElementById('reset')
 let nextButton = document.getElementById('next')
     nextButton.addEventListener('click', function(){
         countArr++;
-        console.log(countArr)
         postOptions();
         postQuestions();
-        console.log(countArr);
         removeOldQuestion(); 
+        removeMessageToPlayer();
+        resetTimer(timerInterval);
     
     })
 
@@ -251,60 +260,103 @@ async function postOptions(){
 }
 console.log(postOptions())
 
+// SELECT MESSAGE TO POST
+let messageToUser = "Let's Play!!!"
+let positiveIteration = function(){
+    for (let i=0 ; i < posMessageArr.length; i++){
+        messageToUser = posMessageArr[i];
+     }
+ }
+ let negativeIteration = function(){
+     for(let i = 0; i < negMessageArr.length; i++){
+         messageToUser = negMessageArr[i];
+     }
+
+ }
+ 
+
 // RIGHT ANSWER
 function isRight(selectedOption){
     if(selectedOption === rightAnswer){
         updateScore();
-        let successMessage ='Great Answer'
-        postMessageToPlayer(successMessage)
-        stopTimer(timerInterval); 
-        setTimeout(removeMessageToPlayer, 1500)
+        positiveIteration();
+        postMessageToPlayer(messageToUser);
+        stopTimer(timerInterval);
     
         
     } else {
         handleErrorTracker();
-        let badMessage = `Wow!!! that's wrong`
-        postMessageToPlayer(badMessage)
-        console.log('buuuuu')
-        console.log(errorTracker)
-        stopTimer(timerInterval);  
-        setTimeout(removeMessageToPlayer, 1500)     
+        negativeIteration();
+        postMessageToPlayer(messageToUser);
+        stopTimer(timerInterval);
+       
     }
 }
 // ERROR TRACKER
-let errorTracker = 3
+let errorTracker = 0
 function handleErrorTracker(){
-    errorTracker -= 1;
-    if(errorTracker === 0){
-        window.alert('GAME OVER'); 
-        resetButton()
+    errorTracker += 1;
+    if(errorTracker === 3){
+        cruxGeneration3()
+       setTimeout(window.alert('GAME OVER'), 2000) ; 
+       setTimeout(resetButton(), 500);
+    } else if(errorTracker === 1){
+        cruxGeneration1()
+    } else if(errorTracker === 2){
+        cruxGeneration2()
+       
     }
-    cruxGeneration()
+    
 }
 
 // ERROR CRUX GENERATION
-let cruxGeneration = function(){
-    let cruxMaker = document.getElementById('error-crux')
-    cruxMaker.style.color = 'black'
-    cruxMaker.innerHTML = 'X'
-    console.log('it works')
+let cruxMaker = document.getElementById('error-crux')
+
+let cruxGeneration1 = function(){
+    let cross1 = document.createElement('span')
+    cross1.style.color = 'black'
+    cross1.style.content = 'center'
+    cross1.innerHTML = 'X'
+    cruxMaker.append(cross1)
 }
+
+let cruxGeneration2 = function(){
+    let cross2 =  document.createElement('span')
+    cross2.style.color = 'black'
+    cross2.innerHTML = 'X'
+    cruxMaker.append(cross2)
+}
+   
+let cruxGeneration3 = function(){ 
+    let cross3 =  document.createElement('span')
+    cross3.style.color = 'black'
+    cross3.innerHTML = 'X'
+    cruxMaker.append(cross3)
+}
+    
+
+
+    
 
 
 // MESSAGE TO PLAYER
+let posMessageArr = ['Great Work'] // 'You Rock', 'Wow!!!', 'You are a Star'
+let negMessageArr = ['Let\'s try again'] //  'You just missed that one'
 let postMessageToPlayer = function(message){
-    let messageToPlayer = document.getElementById('message-player');
-    let messageElement = document.createElement('p');
-    messageElement.setAttribute('id', 'showMessage');
-    messageElement.style.color = 'white'
-    messageElement.style.fontSize = '20px'
-    messageElement.style.position = 'center'
-    messageElement.innerHTML = message;
-    messageToPlayer.append(messageElement);
+    let messageToPlayer = document.getElementById('message');
+    messageToPlayer.style.color = 'white'
+    messageToPlayer.style.fontSize = '25px'
+    messageToPlayer.innerHTML = messageToUser;
+
 }
+postMessageToPlayer()
+
+
+
+
 // RESET MESSAGE TO PLAYER
 function removeMessageToPlayer(){
-    let removeMessage = document.getElementById('showMessage')
+    let removeMessage = document.getElementById('message')
     removeMessage.remove();
 
 

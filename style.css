@@ -8,7 +8,8 @@ body{
     background-repeat: no-repeat;
     background-position-x: center;
     height: 100vh;
-    position: relative;
+    margin: 0;
+
     
 }
 
@@ -182,8 +183,6 @@ body{
 #user-name{
     color: white;
     font-size: 20px;
-    margin-top: 50;
-    margin-left: 200px;
     max-width: 70%;
     border: 2px solid white;
 
@@ -198,6 +197,10 @@ body{
     display: flex;
     justify-content: flex-end;
 }
+#message{
+    border: 1px solid white;
+    max-width: 70%;
 
+}
 /* FOOTER */
 
