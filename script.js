@@ -13,8 +13,10 @@
  // GLOBAL VARIABLES
 var rightAnswer = null      // RIGHT ANSWER
 var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
-var timerInterval = null
-var countArr = '4'
+var playableQuestions = '10'
+var playableLevel = 'easy'
+
+var countArr = '0'
 
 // TOPIC SELECTION SCIENCE
 var scienceButton = document.getElementById('science')
@@ -34,15 +36,35 @@ geographyButton.addEventListener('click',function(){
     getFetchQuestions(getDataObj)
 })
 
-// FUNCTION TO SWITCH CATEGORY
+// SWITCH CATEGORY
 function handledCategoryToPlay(category){
     playableCategory = category;
     getDataObj.categorySelected = playableCategory;
 }
 // SWITCH ARRAY #
 
+//  SWITCH NUMBER OF QUESTIONS
+
+let qFromUser = document.getElementById('dropdown-list')
+qFromUser.onchange = function updateNumberOfQuestions (){
+    var numberQuestionsSelected = qFromUser.options[qFromUser.selectedIndex].text
+    console.log(numberQuestionsSelected);
+    handleNumberOfQuestionsToPlay(numberQuestionsSelected);
+    getFetchQuestions(getDataObj);
+}
 
 
+function handleNumberOfQuestionsToPlay(num){
+    playableQuestions = num;
+    getDataObj.numOfQuestions = playableQuestions;
+    console.log(playableQuestions);
+}
+
+// SWITCH DIFFICULTY LEVEL
+let levelArr = ['easy', 'medium', 'hard']
+
+function updateDifficultyLevel(){
+}
 
 
 
@@ -81,55 +103,56 @@ let updateScore = function(){
     scoreBoard.innerHTML = `Your current Score is: ${initialScore}`;
 }
 
-// TIMER 
+// TIMER var timerInterval = null
+var timerInterval = null
 let startTime = 10;
 let timer = document.getElementById('countdown');
     timer.style.color = 'black'
     timer.innerHTML = `Your have ${startTime} sec`;
 
-function countDown(){
-    startTime--;
-    timer.innerHTML = `Remaining time ${startTime}`
-    if(startTime === 0){
-        window.alert('Time is UP!!!');
-        stopTimer(setInterval);
-        startTime = 0;
-        timer.innerHTML = `Your have ${startTime} sec` 
-    }
+function timerCountDown (){
+        startTime--;
+        timer.innerHTML = `Remaining time: ${startTime}`;
+        console.log('timer')
+        if(startTime === 0){
+            resetTimer(timerCountDown)
+        } 
+};
 
+function resetTimer(int){
+    clearInterval(int)
+    startTime = 10;
+    timer.innerHTML = `Your time is ${startTime} sec`;
+};
+
+function resetTrackers(){
+    countArr = 0;
+    errorTracker = 0;
+    
+    initialScore = 0
+    scoreBoard.innerHTML = `Your Score is: ${initialScore}`
 }
-
-function stopTimer(int){ // STOP TIMER
-    clearInterval(int);
-}
-
 
 // PLAY BUTTON
 let playButton = document.getElementById('start')
 playButton.addEventListener('click', function(){
-    countArr = 0
+    timerInterval = setInterval(timerCountDown, 1000);
+    resetTrackers()
     getFetchQuestions(getDataObj)
     postQuestions()
     postOptions()
-    errorTracker = 0;
-    document.querySelector('#start').disable = true;
-   
+    timerCountDown()
 
 })
 
 // RESET BUTTON
 let resetButton = document.getElementById('reset')
     resetButton.addEventListener('click', function(){
-        stopTimer(timerInterval); 
-        startTime = 10;
-        timer.innerHTML = `Your time is ${startTime} sec`;
-        initialScore = 0
-        scoreBoard.innerHTML = `Your Score is: ${initialScore}`
-
+        resetTimer(timerInterval); 
+        resetTrackers() 
 })
 
 // NEXT BUTTON
-
 let nextButton = document.getElementById('next')
     nextButton.addEventListener('click', function(){
         countArr++;
@@ -138,13 +161,14 @@ let nextButton = document.getElementById('next')
         postQuestions();
         console.log(countArr);
         removeOldQuestion(); 
+    
     })
 
-// GET QUESTIONS FROM API
+// DATA OBJECT
 var getDataObj = {
-    numOfQuestions: '30',   // let numOfQuestions = '30'
+    numOfQuestions: playableQuestions,   // let numOfQuestions = '30'
     categorySelected: playableCategory, // science 17 / geo 22
-    difficultyLevel: 'easy',// medium / hard
+    difficultyLevel: playableLevel,// medium / hard
     type: 'multiple',
 }
 
@@ -296,15 +320,5 @@ function removeMessageToPlayer(){
 // add victory wound when completing the set of questions successfully
 // create a list of 10 higher 
 
-//ADD PLAYER LOCATION
-function geoLocal(){
-    navigator.geolocation.getCurrentPosition(showPosition)
-}
-function showPosition(position){
-    let latitude = position.coords.latitude
-    let longitude = position.coords.longitude
-    let coordinates = [latitude, longitude]
-    console.log(coordinates)
-}
 
 
