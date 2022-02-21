@@ -30,7 +30,7 @@ var scienceButton = document.getElementById('science')
 
 // TOPIC SELECTION GEOGRAPHY
 var geographyButton = document.getElementById('geography')
-geographyButton.addEventListener('click',function(){
+geographyButton.addEventListener('click',() => {
     console.log('you selected geography')
     let geoCat = '22'
     handledCategoryToPlay(geoCat)
@@ -107,7 +107,7 @@ let scoreBoard = document.getElementById('score');
 scoreBoard.style.color = 'black'
 scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
 
-let updateScore = function(){
+let updateScore = () => {
     initialScore += 1;
     scoreBoard.innerHTML = `Your current Score is: ${initialScore}`;
     updateDifficultyLevel();
