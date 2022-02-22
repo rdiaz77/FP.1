@@ -78,6 +78,20 @@ function updateDifficultyLevel(){
         getDataObj.difficultyLevel = playableLevel;
     }
 }
+// SHUFFLE OPTION ARRAY
+let postOptionArr = ['option1','option2','option3','option4']
+
+
+let randomIndex = Math.floor((Math.random() * postOptionArr.length))
+console.log(randomIndex)
+
+let newShuffledArr = () =>{
+    
+    for(let i = randomIndex; i < postOptionArr.length; i++){
+
+    }
+}
+
 
 
 
@@ -316,17 +330,14 @@ function removeOldQuestion(){
 
 // SELECT MESSAGE TO POST
 let messageToUser = "Let's Play!!!"
-let positiveIteration = function(){
-    for (let i=0 ; i < posMessageArr.length; i++){
-        messageToUser = posMessageArr[i];
-     }
- }
- let negativeIteration = function(){
-     for(let i = 0; i < negMessageArr.length; i++){
-         messageToUser = negMessageArr[i];
-     }
-
- }
+let positiveIteration = () => {
+    positiveMessageGenerator;
+    messageToUser = positiveMessageGenerator
+}
+let negativeIteration = () => {
+    negativeMessageGenerator;
+    messageToUser = negativeMessageGenerator;
+}
  
 
 // RIGHT ANSWER
@@ -368,19 +379,19 @@ function handleErrorTracker(){
 // ERROR CRUX GENERATION
 let cruxMaker = document.getElementById('error-crux')
 
-let cruxGeneration1 = function(){
+let cruxGeneration1 = () => {
     let cross1 = document.createElement('img')
     cross1.src = './images/32px cross.png'
     cruxMaker.append(cross1)
 }
 
-let cruxGeneration2 = function(){
+let cruxGeneration2 = () =>{
     let cross2 =  document.createElement('img')
     cross2.src = './images/32px cross.png'
     cruxMaker.append(cross2)
 }
    
-let cruxGeneration3 = function(){ 
+let cruxGeneration3 = () =>{ 
     let cross3 =  document.createElement('img')
     cross3.src = './images/32px cross.png'
     cruxMaker.append(cross3)
@@ -397,19 +408,21 @@ let cruxGeneration3 = function(){
 
 
 // MESSAGE TO PLAYER
-let posMessageArr = ['Great Work'] // 'You Rock', 'Wow!!!', 'You are a Star'
-let negMessageArr = ['Let\'s try again'] //  'You just missed that one'
+let posMessageArr = ['Great Work', 'You Rock', 'Wow!!!', 'You are a Star'] // 'You Rock', 'Wow!!!', 'You are a Star'
+let negMessageArr = ['Try again', 'Come on!!!', 'Very Close'] //  'You just missed that one'
 let postMessageToPlayer = function(message){
     let messageToPlayer = document.getElementById('message');
     messageToPlayer.style.color = 'white'
-    messageToPlayer.style.fontSize = '25px'
+    messageToPlayer.style.fontSize = '20px'
     messageToPlayer.innerHTML = messageToUser;
 
 }
 postMessageToPlayer()
 
-
-
+let positiveMessageGenerator = posMessageArr[Math.floor(Math.random()*posMessageArr.length)]
+console.log(positiveMessageGenerator)
+let negativeMessageGenerator = negMessageArr[Math.floor(Math.random() * negMessageArr.length)]
+console.log(negativeMessageGenerator)
 
 // RESET MESSAGE TO PLAYER
 function removeMessageToPlayer(){
