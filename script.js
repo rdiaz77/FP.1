@@ -22,7 +22,7 @@ var isAnswer1_ButtonDisabled = true;
 var isAnswer2_ButtonDisabled = true;
 var isAnswer3_ButtonDisabled = true;
 var isAnswer4_ButtonDisabled = true;
-var countArr = '0'
+var countArr = 0;
 
 // TOPIC SELECTION SCIENCE
 var scienceButton = document.getElementById('science')
@@ -130,8 +130,9 @@ let updateScore = () => {
 var timerInterval = null
 let startTime = 10;
 let timer = document.getElementById('countdown');
-    timer.style.color = 'white'
+    timer.style.color = 'black'
     timer.style.fontWeight = 'bold'
+    timer.style.textAlign = 'center'
     timer.innerHTML = `Your have ${startTime} sec`;
 
 function timerCountDown (){
@@ -170,54 +171,59 @@ function resetTrackers(){
 // PLAY BUTTON
 let playButton = document.getElementById('start')
 playButton.addEventListener('click', function(){
-    timerInterval = setInterval(timerCountDown, 1000);
+    countArr;
+    // timerInterval = setInterval(timerCountDown, 1000);
     resetTrackers()
     getFetchQuestions(getDataObj)
     postQuestions()
-    postOptions()
-    timerCountDown()
+    // timerCountDown()
     isPlayButtonDisabled = true;
     playButton.disabled = isPlayButtonDisabled;
-    updateNextAndResetAndAnswerButtonStatus()
+    enableAnswerButtons();
 
 })
 
 // RESET BUTTON
 let resetButton = document.getElementById('reset')
-    resetButton.disabled = isResetButtonDisabled;
-    resetButton.addEventListener('click', function(){
+resetButton.disabled = isResetButtonDisabled;
+resetButton.addEventListener('click', function(){
         resetTimer(timerInterval); 
         resetTrackers() 
         removeOldQuestion()
         isPlayButtonDisabled = false;
         playButton.disabled = isPlayButtonDisabled;
+        removeCross()
         
 
 })
 
 // NEXT BUTTON
 let nextButton = document.getElementById('next')
-    nextButton.disabled = isNextButtonDisabled;
-    nextButton.addEventListener('click', function(){
+nextButton.disabled = isNextButtonDisabled;
+nextButton.addEventListener('click', function(){
         console.log('this is time interval;', timerInterval)
-        countArr++;
+        countArr += 1;
         resetTimer(timerInterval); 
-        postOptions();
         postQuestions();
         removeOldQuestion(); 
         removeMessageToPlayer();
         timerCountDown()
+        timerInterval = setInterval(timerCountDown, 1000);
         setTimeout(timerCountDown, 300);
     
     })
 // UPDATE INITIAL STATUS OF BUTTONS
 
 
-var updateNextAndResetAndAnswerButtonStatus = (() => {
+var enableNextAndResetButtons = () => {
     isNextButtonDisabled = false;
     nextButton.disabled = isNextButtonDisabled;
     isResetButtonDisabled = false;
     resetButton.disabled = isResetButtonDisabled;
+    
+}
+
+var enableAnswerButtons = () =>{
     isAnswer1_ButtonDisabled = false;
     isAnswer2_ButtonDisabled = false;
     isAnswer3_ButtonDisabled = false;
@@ -226,7 +232,7 @@ var updateNextAndResetAndAnswerButtonStatus = (() => {
     answer2.disabled = isAnswer2_ButtonDisabled;
     answer3.disabled = isAnswer3_ButtonDisabled;
     answer4.disabled = isAnswer4_ButtonDisabled;
-})
+}
 
 
 // DATA OBJECT
@@ -252,7 +258,7 @@ async function getFetchQuestions(getDataObj){
 
 const returnFetchData = async() => {
     const apiData = await getFetchQuestions(getDataObj);
-   //console.log("this is the JS object =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
+   console.log("this is the JS object original =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
   
    return apiData.map(trivia => {
         return {
@@ -264,13 +270,10 @@ const returnFetchData = async() => {
         }  
     })  
 }
-console.log(countArr)
-console.log(returnFetchData())
 
 // ITERATION TO GET QUESTIONS
 async function postQuestions(){
     let startQuestion = await returnFetchData()
-    // console.log(startQuestion)
     let questionToBePosted = await startQuestion[countArr].receivedQuestions;
     let questionContainer = document.getElementById('question')
     let questionPElement = document.createElement('p')
@@ -280,8 +283,25 @@ async function postQuestions(){
     questionPElement.style.textAlign = 'center'
     questionPElement.innerHTML = questionToBePosted;
     questionContainer.append(questionPElement)
-    console.log(questionToBePosted)
-    console.log(countArr)
+    // let options = await returnFetchData();
+    let optionToBePostedRight = await startQuestion[countArr].receivedRightAnswer;
+    rightAnswer = optionToBePostedRight
+    let optionToBePostedWr1 = await startQuestion[countArr].receivedWrongAnswer1;
+    let optionToBePostedWr2 = await startQuestion[countArr].receivedWrongAnswer2;
+    let optionToBePostedWr3 = await startQuestion[countArr].receivedWrongAnswer3;
+    let option1 = document.getElementById('option1');
+    option1.innerHTML = optionToBePostedRight
+    let option2 = document.getElementById('option2');
+    option2.innerHTML = optionToBePostedWr1
+    let option3 = document.getElementById('option3');
+    option3.innerHTML = optionToBePostedWr2
+    let option4 = document.getElementById('option4');
+    option4.innerHTML = optionToBePostedWr3
+    // console.log(optionToBePostedRight)
+    // console.log(optionToBePostedWr1)
+    // console.log(optionToBePostedWr2)
+    // console.log(optionToBePostedWr3)
+    // console.log('the counter is' , countArr)
   }
 
 
@@ -292,28 +312,7 @@ function removeOldQuestion(){
 }
 
 // POTENTIAL ANSWERS - HOW TO SHUFFLE?
-async function postOptions(){
 
-    let options = await returnFetchData();
-    let optionToBePostedRight = await options[countArr].receivedRightAnswer;
-    rightAnswer = optionToBePostedRight
-    let optionToBePostedWr1 = await options[countArr].receivedWrongAnswer1;
-    let optionToBePostedWr2 = await options[countArr].receivedWrongAnswer2;
-    let optionToBePostedWr3 = await options[countArr].receivedWrongAnswer3;
-    let option1 = document.getElementById('option1');
-    option1.innerHTML = optionToBePostedRight
-    let option2 = document.getElementById('option2');
-    option2.innerHTML = optionToBePostedWr1
-    let option3 = document.getElementById('option3');
-    option3.innerHTML = optionToBePostedWr2
-    let option4 = document.getElementById('option4');
-    option4.innerHTML = optionToBePostedWr3
-    console.log(optionToBePostedRight)
-    console.log(optionToBePostedWr1)
-    console.log(optionToBePostedWr2)
-    console.log(optionToBePostedWr3)
-}
-console.log(postOptions())
 
 // SELECT MESSAGE TO POST
 let messageToUser = "Let's Play!!!"
@@ -337,6 +336,7 @@ function isRight(selectedOption){
         positiveIteration();
         postMessageToPlayer(messageToUser);
         stopTimer(timerInterval);
+        enableNextAndResetButtons()
     
         
     } else {
@@ -344,6 +344,7 @@ function isRight(selectedOption){
         negativeIteration();
         postMessageToPlayer(messageToUser);
         stopTimer(timerInterval);
+        enableNextAndResetButtons();
        
     }
 }
@@ -368,28 +369,29 @@ function handleErrorTracker(){
 let cruxMaker = document.getElementById('error-crux')
 
 let cruxGeneration1 = function(){
-    let cross1 = document.createElement('span')
-    cross1.style.color = 'black'
-    cross1.style.content = 'center'
-    cross1.innerHTML = 'X'
+    let cross1 = document.createElement('img')
+    cross1.src = './images/32px cross.png'
     cruxMaker.append(cross1)
 }
 
 let cruxGeneration2 = function(){
-    let cross2 =  document.createElement('span')
-    cross2.style.color = 'black'
-    cross2.innerHTML = 'X'
+    let cross2 =  document.createElement('img')
+    cross2.src = './images/32px cross.png'
     cruxMaker.append(cross2)
 }
    
 let cruxGeneration3 = function(){ 
-    let cross3 =  document.createElement('span')
-    cross3.style.color = 'black'
-    cross3.innerHTML = 'X'
+    let cross3 =  document.createElement('img')
+    cross3.src = './images/32px cross.png'
     cruxMaker.append(cross3)
 }
     
+// REMOVE CROSS
+// removeCross(() =>{
+//     let removeCrosses = document.getElementById('error-crux')
+//     removeCrosses.remove();
 
+// })
 
     
 
