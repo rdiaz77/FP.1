@@ -13,10 +13,15 @@
  // GLOBAL VARIABLES
 var rightAnswer = null      // RIGHT ANSWER
 var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
-var playableQuestions = '10'
-var playableLevel = 'easy'
-
-
+var playableQuestions = '10' // DEFAULT # OF QUESTIONS
+var playableLevel = 'easy' // DEFAULT LEVEL
+var isPlayButtonDisabled = false;
+var isNextButtonDisabled = true;
+var isResetButtonDisabled = true;
+var isAnswer1_ButtonDisabled = true;
+var isAnswer2_ButtonDisabled = true;
+var isAnswer3_ButtonDisabled = true;
+var isAnswer4_ButtonDisabled = true;
 var countArr = '0'
 
 // TOPIC SELECTION SCIENCE
@@ -78,24 +83,28 @@ function updateDifficultyLevel(){
 
 // OPTION BUTTONS
 var answer1 = document.getElementById('answer1')
+answer1.disabled = isAnswer1_ButtonDisabled;
 answer1.addEventListener('click',function(){
     var getOption1 = document.getElementById('option1').innerHTML
     isRight(getOption1)
 })
 
 var answer2 = document.getElementById('answer2')
+answer2.disabled = isAnswer2_ButtonDisabled;
 answer2.addEventListener('click',function(){
     var getOption2 = document.getElementById('option2').innerHTML
     isRight(getOption2)
 })
 
 var answer3 = document.getElementById('answer3')
+answer3.disabled = isAnswer3_ButtonDisabled;
 answer3.addEventListener('click',function(){
     var getOption3 = document.getElementById('option3').innerHTML
     isRight(getOption3)
 })
 
 var answer4 = document.getElementById('answer4')
+answer4.disabled = isAnswer4_ButtonDisabled;
 answer4.addEventListener('click',function(){
     var getOption4 = document.getElementById('option4').innerHTML;
     isRight(getOption4) 
@@ -121,7 +130,8 @@ let updateScore = () => {
 var timerInterval = null
 let startTime = 10;
 let timer = document.getElementById('countdown');
-    timer.style.color = 'black'
+    timer.style.color = 'white'
+    timer.style.fontWeight = 'bold'
     timer.innerHTML = `Your have ${startTime} sec`;
 
 function timerCountDown (){
@@ -156,6 +166,7 @@ function resetTrackers(){
  
 }
 
+
 // PLAY BUTTON
 let playButton = document.getElementById('start')
 playButton.addEventListener('click', function(){
@@ -165,27 +176,58 @@ playButton.addEventListener('click', function(){
     postQuestions()
     postOptions()
     timerCountDown()
+    isPlayButtonDisabled = true;
+    playButton.disabled = isPlayButtonDisabled;
+    updateNextAndResetAndAnswerButtonStatus()
 
 })
 
 // RESET BUTTON
 let resetButton = document.getElementById('reset')
+    resetButton.disabled = isResetButtonDisabled;
     resetButton.addEventListener('click', function(){
         resetTimer(timerInterval); 
         resetTrackers() 
+        removeOldQuestion()
+        isPlayButtonDisabled = false;
+        playButton.disabled = isPlayButtonDisabled;
+        
+
 })
 
 // NEXT BUTTON
 let nextButton = document.getElementById('next')
+    nextButton.disabled = isNextButtonDisabled;
     nextButton.addEventListener('click', function(){
+        console.log('this is time interval;', timerInterval)
         countArr++;
+        resetTimer(timerInterval); 
         postOptions();
         postQuestions();
         removeOldQuestion(); 
         removeMessageToPlayer();
-        resetTimer(timerInterval);
+        timerCountDown()
+        setTimeout(timerCountDown, 300);
     
     })
+// UPDATE INITIAL STATUS OF BUTTONS
+
+
+var updateNextAndResetAndAnswerButtonStatus = (() => {
+    isNextButtonDisabled = false;
+    nextButton.disabled = isNextButtonDisabled;
+    isResetButtonDisabled = false;
+    resetButton.disabled = isResetButtonDisabled;
+    isAnswer1_ButtonDisabled = false;
+    isAnswer2_ButtonDisabled = false;
+    isAnswer3_ButtonDisabled = false;
+    isAnswer4_ButtonDisabled = false;
+    answer1.disabled = isAnswer1_ButtonDisabled;
+    answer2.disabled = isAnswer2_ButtonDisabled;
+    answer3.disabled = isAnswer3_ButtonDisabled;
+    answer4.disabled = isAnswer4_ButtonDisabled;
+})
+
 
 // DATA OBJECT
 var getDataObj = {
