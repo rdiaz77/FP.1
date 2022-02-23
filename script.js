@@ -83,17 +83,54 @@ let postOptionArr = ['option1','option2','option3','option4']
 
 
 let randomIndex = Math.floor((Math.random() * postOptionArr.length))
-console.log(randomIndex)
 
-let newShuffledArr = () =>{
-    
-    for(let i = randomIndex; i < postOptionArr.length; i++){
-
+function shuffleArray(array) {
+    let curId = array.length;
+    // There remain elements to shuffle
+    while (0 !== curId) {
+      // Pick a remaining element
+      let randId = randomIndex;
+      curId -= 1;
+      // Swap it with the current element.
+      let tmp = array[curId];
+      array[curId] = array[randId];
+      array[randId] = tmp;
     }
-}
+    return array;
+  }
+  // Usage of shuffle
+  
+  postOptionArr = shuffleArray(postOptionArr);
+  console.log(postOptionArr);
+
+  let postOption1 = postOptionArr[0];
+  let postOption2 = postOptionArr[1];
+  let postOption3 = postOptionArr[2];
+  let postOption4 = postOptionArr[3];
+  console.log('this is pos1', postOption1)
 
 
+// function shuffleArray(array) {
+//     let curId = array.length;
+//     // There remain elements to shuffle
+//     while (0 !== curId) {
+//       // Pick a remaining element
+//       let randId = Math.floor(Math.random() * curId);
+//       curId -= 1;
+//       // Swap it with the current element.
+//       let tmp = array[curId];
+//       array[curId] = array[randId];
+//       array[randId] = tmp;
+//     }
+//     return array;
+//   }
+//   // Usage of shuffle
+//   let arr = [1, 2, 3, 4, 5];
+//   arr = shuffleArray(arr);
+//   console.log(arr);
 
+
+  
 
 // OPTION BUTTONS
 var answer1 = document.getElementById('answer1')
@@ -101,7 +138,9 @@ answer1.disabled = isAnswer1_ButtonDisabled;
 answer1.addEventListener('click',function(){
     var getOption1 = document.getElementById('option1').innerHTML
     isRight(getOption1)
+    console.log('this is the answer1', getOption1)
 })
+
 
 var answer2 = document.getElementById('answer2')
 answer2.disabled = isAnswer2_ButtonDisabled;
@@ -272,7 +311,7 @@ async function getFetchQuestions(getDataObj){
 
 const returnFetchData = async() => {
     const apiData = await getFetchQuestions(getDataObj);
-   console.log("this is the JS object original =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
+//    console.log("this is the JS object original =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
   
    return apiData.map(trivia => {
         return {
@@ -299,23 +338,24 @@ async function postQuestions(){
     questionContainer.append(questionPElement)
     // let options = await returnFetchData();
     let optionToBePostedRight = await startQuestion[countArr].receivedRightAnswer;
-    rightAnswer = optionToBePostedRight
+    rightAnswer = optionToBePostedRight;
     let optionToBePostedWr1 = await startQuestion[countArr].receivedWrongAnswer1;
     let optionToBePostedWr2 = await startQuestion[countArr].receivedWrongAnswer2;
     let optionToBePostedWr3 = await startQuestion[countArr].receivedWrongAnswer3;
-    let option1 = document.getElementById('option1');
+    let option1 = document.getElementById(postOption1);
     option1.innerHTML = optionToBePostedRight
-    let option2 = document.getElementById('option2');
+    let option2 = document.getElementById(postOption2);
     option2.innerHTML = optionToBePostedWr1
-    let option3 = document.getElementById('option3');
+    let option3 = document.getElementById(postOption3);
     option3.innerHTML = optionToBePostedWr2
-    let option4 = document.getElementById('option4');
+    let option4 = document.getElementById(postOption4);
     option4.innerHTML = optionToBePostedWr3
-    // console.log(optionToBePostedRight)
+    console.log(optionToBePostedRight)
     // console.log(optionToBePostedWr1)
     // console.log(optionToBePostedWr2)
     // console.log(optionToBePostedWr3)
     // console.log('the counter is' , countArr)
+    console.log('this is the right answer variable', rightAnswer)
   }
 
 
@@ -371,9 +411,9 @@ function handleErrorTracker(){
         cruxGeneration1()
     } else if(errorTracker === 2){
         cruxGeneration2()
-       
+
     }
-    
+
 }
 
 // ERROR CRUX GENERATION
@@ -417,12 +457,11 @@ let postMessageToPlayer = function(message){
     messageToPlayer.innerHTML = messageToUser;
 
 }
-postMessageToPlayer()
+
 
 let positiveMessageGenerator = posMessageArr[Math.floor(Math.random()*posMessageArr.length)]
-console.log(positiveMessageGenerator)
 let negativeMessageGenerator = negMessageArr[Math.floor(Math.random() * negMessageArr.length)]
-console.log(negativeMessageGenerator)
+
 
 // RESET MESSAGE TO PLAYER
 function removeMessageToPlayer(){
