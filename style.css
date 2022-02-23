@@ -19,7 +19,7 @@ body{
 
 /* Play / Next / Reset Button */
 .controls-container{
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -50,7 +50,7 @@ body{
 
 /* Science - GEO button */
 .topics-container{
-    border: 1px solid greenyellow;
+    /* border: 1px solid greenyellow; */
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -86,7 +86,7 @@ body{
     margin: auto;
     padding-top: 1rem;
     max-width: 80%;
-    border: solid blue 1px;
+    /* border: solid blue 1px; */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -113,9 +113,9 @@ body{
 
 /* Tracker buttons */
 .trackers-container{
-    border: 1px solid white;
+    /* border: 1px solid white; */
     margin-top: 10px;
-    margin-left: 50px;
+    margin-left: 35px;
     max-width: 250px;
 
     
@@ -125,11 +125,16 @@ body{
     border: 2px solid white;
     text-align: center;
     padding-bottom: 0.2rem;
+    border-radius: 50px;
+    padding: 3px;
+    background-color: thistle;
+    box-shadow: 0px 5px 10px black;
+    transform: scale(.95);
     
     
 }
 #error-crux{
-    border: 2px solid white;
+    /* border: 2px solid white; */
     text-align: center;
     padding-top: 0.2rem;
     
@@ -138,7 +143,7 @@ body{
     
 }
 .clock-container{
-    border: 1px solid greenyellow;
+    /* border: 1px solid greenyellow; */
     margin-right: 85%;
     position: relative;
     left: 85%;
@@ -152,8 +157,8 @@ body{
     color: white;
     border-radius: 50px;
     padding: 3px;
-    background-color: thistle;
-    box-shadow: 0px 5px 10px black;
+    background-color: rgb(65, 58, 45);
+    box-shadow: 0px 5px 10px rgb(49, 39, 39);
     transform: scale(.95);
    
 }
@@ -172,13 +177,23 @@ body{
 
 /* USER DATA BOX */
 .user-data-container{
-    border: 5px solid green;
+    /* border: 5px solid green; */
     margin-top: 10px;
-    margin-left: 50px;
-    max-width: 250px;
+    margin-left: 35px;
+    max-width: 200px;
+    
 }
 #message{
     border: 1px solid white;
+    text-align: center;
+    box-shadow: 0px 5px 10px black;
+    transform: scale(.95);
+    font-size: 1rem;
+    font-style: italic;
+    color: whitesmoke;
+    background-color: tomato;
+    border-radius: 3px;
+    margin-top: 0.3rem;
 }
 
 #user-name{

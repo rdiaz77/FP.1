@@ -183,7 +183,6 @@ let updateScore = () => {
 var timerInterval = null
 let startTime = 10;
 let timer = document.getElementById('countdown');
-    timer.style.color = 'black'
     timer.style.fontWeight = 'bold'
     timer.style.textAlign = 'center'
     timer.innerHTML = `Your have ${startTime} sec`;
