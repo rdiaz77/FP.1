@@ -109,27 +109,6 @@ function shuffleArray(array) {
   let postOption4 = postOptionArr[3];
   console.log('this is pos1', postOption1)
 
-
-// function shuffleArray(array) {
-//     let curId = array.length;
-//     // There remain elements to shuffle
-//     while (0 !== curId) {
-//       // Pick a remaining element
-//       let randId = Math.floor(Math.random() * curId);
-//       curId -= 1;
-//       // Swap it with the current element.
-//       let tmp = array[curId];
-//       array[curId] = array[randId];
-//       array[randId] = tmp;
-//     }
-//     return array;
-//   }
-//   // Usage of shuffle
-//   let arr = [1, 2, 3, 4, 5];
-//   arr = shuffleArray(arr);
-//   console.log(arr);
-
-
   
 
 // OPTION BUTTONS
@@ -137,8 +116,11 @@ var answer1 = document.getElementById('answer1')
 answer1.disabled = isAnswer1_ButtonDisabled;
 answer1.addEventListener('click',function(){
     var getOption1 = document.getElementById('option1').innerHTML
-    isRight(getOption1)
+    isRight(getOption1);
     console.log('this is the answer1', getOption1)
+    disableAnswerButtons();
+    stopTimer(timerInterval);
+    
 })
 
 
@@ -146,21 +128,28 @@ var answer2 = document.getElementById('answer2')
 answer2.disabled = isAnswer2_ButtonDisabled;
 answer2.addEventListener('click',function(){
     var getOption2 = document.getElementById('option2').innerHTML
-    isRight(getOption2)
+    isRight(getOption2);
+    disableAnswerButtons();
+    stopTimer(timerInterval)
 })
 
 var answer3 = document.getElementById('answer3')
 answer3.disabled = isAnswer3_ButtonDisabled;
 answer3.addEventListener('click',function(){
     var getOption3 = document.getElementById('option3').innerHTML
-    isRight(getOption3)
+    isRight(getOption3);
+    disableAnswerButtons();
+    stopTimer(timerInterval);
+    
 })
 
 var answer4 = document.getElementById('answer4')
 answer4.disabled = isAnswer4_ButtonDisabled;
 answer4.addEventListener('click',function(){
     var getOption4 = document.getElementById('option4').innerHTML;
-    isRight(getOption4) 
+    isRight(getOption4); 
+    disableAnswerButtons();
+    stopTimer(timerInterval)
 })
 
 // SCORE TRACKER
@@ -178,7 +167,6 @@ let updateScore = () => {
     
 }
 
-
 // TIMER 
 var timerInterval = null
 let startTime = 10;
@@ -192,9 +180,9 @@ function timerCountDown (){
         timer.innerHTML = `Remaining time: ${startTime}`;
         console.log('timer')
         if(startTime === 0){
-           clearInterval(timerInterval)
+           stopTimer(timerInterval);
            setTimeout(() => { 
-            startTime = 10;
+            startTime = 10
             timer.innerHTML = `Your time is ${startTime} sec` }, 1500);
             window.alert('Your time is up!!! ... Sorry you lose')
             
@@ -232,6 +220,7 @@ playButton.addEventListener('click', function(){
     isPlayButtonDisabled = true;
     playButton.disabled = isPlayButtonDisabled;
     enableAnswerButtons();
+   
 
 })
 
@@ -245,6 +234,9 @@ resetButton.addEventListener('click', function(){
         isPlayButtonDisabled = false;
         playButton.disabled = isPlayButtonDisabled;
         removeCross()
+        disableAnswerButtons();
+        disableNextAndResetButtons();
+        
         
 
 })
@@ -259,9 +251,8 @@ nextButton.addEventListener('click', function(){
         postQuestions();
         removeOldQuestion(); 
         removeMessageToPlayer();
-        timerCountDown()
         timerInterval = setInterval(timerCountDown, 1000);
-        setTimeout(timerCountDown, 300);
+        enableAnswerButtons();
     
     })
 // UPDATE INITIAL STATUS OF BUTTONS
@@ -274,7 +265,13 @@ var enableNextAndResetButtons = () => {
     resetButton.disabled = isResetButtonDisabled;
     
 }
-
+var disableNextAndResetButtons = () => {
+    isNextButtonDisabled = true;
+    nextButton.disabled = isNextButtonDisabled;
+    isResetButtonDisabled = true;
+    resetButton.disabled = isResetButtonDisabled;
+    
+}
 var enableAnswerButtons = () =>{
     isAnswer1_ButtonDisabled = false;
     isAnswer2_ButtonDisabled = false;
@@ -285,7 +282,16 @@ var enableAnswerButtons = () =>{
     answer3.disabled = isAnswer3_ButtonDisabled;
     answer4.disabled = isAnswer4_ButtonDisabled;
 }
-
+var disableAnswerButtons = () =>{
+    isAnswer1_ButtonDisabled = true;
+    isAnswer2_ButtonDisabled = true;
+    isAnswer3_ButtonDisabled = true;
+    isAnswer4_ButtonDisabled = true;
+    answer1.disabled = isAnswer1_ButtonDisabled;
+    answer2.disabled = isAnswer2_ButtonDisabled;
+    answer3.disabled = isAnswer3_ButtonDisabled;
+    answer4.disabled = isAnswer4_ButtonDisabled;
+}
 
 // DATA OBJECT
 var getDataObj = {
@@ -310,7 +316,7 @@ async function getFetchQuestions(getDataObj){
 
 const returnFetchData = async() => {
     const apiData = await getFetchQuestions(getDataObj);
-//    console.log("this is the JS object original =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
+   console.log("this is the JS object original =>" , apiData) // ACCESS TO OBJ / apiData[i].question - ACCESS TO QUESTIONS
   
    return apiData.map(trivia => {
         return {
@@ -437,11 +443,11 @@ let cruxGeneration3 = () =>{
 }
     
 // REMOVE CROSS
-// removeCross(() =>{
-//     let removeCrosses = document.getElementById('error-crux')
-//     removeCrosses.remove();
+let removeCross = (() =>{
+    let removeCrosses = document.getElementById('error-crux')
+    removeCrosses.remove();
 
-// })
+})
 
     
 
