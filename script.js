@@ -1,15 +1,15 @@
 
-let person = prompt('Please enter your name: ')
+// let person = prompt('Please enter your name: ')
 
-if (person!= null){
+// if (person!= null){
 
-    var userName = document.getElementById('user-name')
-    userName.innerHTML = `Welcome to the Trivia Game ${person}`
-} else {
-    window.alert('Please enter your name')
+//     var userName = document.getElementById('user-name')
+//     userName.innerHTML = `Welcome to the Trivia Game ${person}`
+// } else {
+//     window.alert('Please enter your name')
     
 
-}
+// }
  // GLOBAL VARIABLES
 var rightAnswer = null      // RIGHT ANSWER
 var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
@@ -49,7 +49,6 @@ function handledCategoryToPlay(category){
     playableCategory = category;
     getDataObj.categorySelected = playableCategory;
 }
-// SWITCH ARRAY #
 
 //  SWITCH NUMBER OF QUESTIONS
 
@@ -68,7 +67,16 @@ function handleNumberOfQuestionsToPlay(num){
 }
 
 // FINISH GAME
+let totalNumberOfQuestionForThisTheGame = playableQuestions;
+let questionsAnsweredUntilNow = countArr;
 
+let updateQuestionsAnsweredUntilNow = () => questionsAnsweredUntilNow ++
+
+let winner = () =>{
+    while(questionsAnsweredUntilNow != playableQuestions){
+        
+    }
+}
 
 
 // SWITCH DIFFICULTY LEVEL
@@ -163,7 +171,7 @@ scoreBoard.innerHTML = `Yor Score is: ${initialScore}`
 
 let updateScore = () => {
     initialScore += 1;
-    scoreBoard.innerHTML = `Your current Score is: ${initialScore}`;
+    scoreBoard.innerHTML = `Your current Score is: ${initialScore} / ${questionsAnsweredUntilNow}`;
     updateDifficultyLevel();
     console.log(playableLevel)
     console.log(getDataObj)
@@ -227,7 +235,7 @@ playButton.addEventListener('click', function(){
     isPlayButtonDisabled = true;
     playButton.disabled = isPlayButtonDisabled;
     enableAnswerButtons();
-   
+    updateQuestionsAnsweredUntilNow();
 
 })
 
@@ -243,6 +251,7 @@ nextButton.addEventListener('click', function(){
         timerInterval = setInterval(timerCountDown, 1000);
         enableAnswerButtons();
         removeMessageToPlayer();
+        updateQuestionsAnsweredUntilNow();
     
     })
 
@@ -259,6 +268,8 @@ resetButton.addEventListener('click', function(){
         disableAnswerButtons();
         disableNextAndResetButtons();
         removeMessageToPlayer()
+        countArr = 0;
+        questionsAnsweredUntilNow = countArr;
 
 })
 
@@ -398,7 +409,7 @@ function isRight(selectedOption){
         stopTimer(timerInterval);
         enableNextAndResetButtons();
         negativeMessageToPlayer();
-       
+        scoreBoard.innerHTML = `Your current Score is: ${initialScore} / ${questionsAnsweredUntilNow}`;
     }
 }
 // ERROR TRACKER
@@ -406,7 +417,7 @@ let errorTracker = 0
 function handleErrorTracker(){
     errorTracker += 1;
     if(errorTracker === 3){
-        setTimeout(disableOnlyNextButton(), 2000);
+        disableOnlyNextButton();
         cruxGeneration3();
         stopTimer(timerInterval);
         window.alert('GAME OVER');
