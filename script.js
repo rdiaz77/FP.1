@@ -185,7 +185,8 @@ function timerCountDown (){
             startTime = 10
             timer.innerHTML = `Your time is ${startTime} sec` }, 1500);
             window.alert('Your time is up!!! ... Sorry you lose')
-            
+            isPlayButtonDisabled = false;
+            playButton.disabled = isPlayButtonDisabled;
         } 
 };
 
@@ -212,7 +213,7 @@ function resetTrackers(){
 let playButton = document.getElementById('start')
 playButton.addEventListener('click', function(){
     countArr;
-    // timerInterval = setInterval(timerCountDown, 1000);
+    timerInterval = setInterval(timerCountDown, 1000);
     resetTrackers()
     getFetchQuestions(getDataObj)
     postQuestions()
@@ -223,6 +224,21 @@ playButton.addEventListener('click', function(){
    
 
 })
+
+// NEXT BUTTON
+let nextButton = document.getElementById('next')
+nextButton.disabled = isNextButtonDisabled;
+nextButton.addEventListener('click', function(){
+        console.log('this is time interval;', timerInterval)
+        countArr += 1;
+        resetTimer(timerInterval); 
+        postQuestions();
+        removeOldQuestion(); 
+        timerInterval = setInterval(timerCountDown, 1000);
+        enableAnswerButtons();
+        removeMessageToPlayer();
+    
+    })
 
 // RESET BUTTON
 let resetButton = document.getElementById('reset')
@@ -236,25 +252,13 @@ resetButton.addEventListener('click', function(){
         removeCross()
         disableAnswerButtons();
         disableNextAndResetButtons();
+        removeMessageToPlayer()
         
         
 
 })
 
-// NEXT BUTTON
-let nextButton = document.getElementById('next')
-nextButton.disabled = isNextButtonDisabled;
-nextButton.addEventListener('click', function(){
-        console.log('this is time interval;', timerInterval)
-        countArr += 1;
-        resetTimer(timerInterval); 
-        postQuestions();
-        removeOldQuestion(); 
-        removeMessageToPlayer();
-        timerInterval = setInterval(timerCountDown, 1000);
-        enableAnswerButtons();
-    
-    })
+
 // UPDATE INITIAL STATUS OF BUTTONS
 
 
@@ -370,37 +374,21 @@ function removeOldQuestion(){
     removeP.remove()
 }
 
-// POTENTIAL ANSWERS - HOW TO SHUFFLE?
-
-
-// SELECT MESSAGE TO POST
-let messageToUser = "Let's Play!!!"
-let positiveIteration = () => {
-    positiveMessageGenerator;
-    messageToUser = positiveMessageGenerator
-}
-let negativeIteration = () => {
-    negativeMessageGenerator;
-    messageToUser = negativeMessageGenerator;
-}
- 
 
 // RIGHT ANSWER
 function isRight(selectedOption){
     if(selectedOption === rightAnswer){
         updateScore();
-        positiveIteration();
-        postMessageToPlayer(messageToUser);
         stopTimer(timerInterval);
-        enableNextAndResetButtons()
+        enableNextAndResetButtons();
+        positiveMessageToPlayer()
     
         
     } else {
         handleErrorTracker();
-        negativeIteration();
-        postMessageToPlayer(messageToUser);
         stopTimer(timerInterval);
         enableNextAndResetButtons();
+        negativeMessageToPlayer();
        
     }
 }
@@ -449,29 +437,38 @@ let removeCross = (() =>{
 
 })
 
-    
+// SELECT MESSAGE TO POST
 
 
 // MESSAGE TO PLAYER
 let posMessageArr = ['Great Work', 'You Rock', 'Wow!!!', 'You are a Star'] // 'You Rock', 'Wow!!!', 'You are a Star'
 let negMessageArr = ['Try again', 'Come on!!!', 'Very Close'] //  'You just missed that one'
-let postMessageToPlayer = function(message){
-    let messageToPlayer = document.getElementById('message');
-    messageToPlayer.style.color = 'white'
-    messageToPlayer.style.fontSize = '20px'
-    messageToPlayer.innerHTML = messageToUser;
+let positiveMessageGenerator = posMessageArr[Math.floor(Math.random()*posMessageArr.length)]
+let negativeMessageGenerator = negMessageArr[Math.floor(Math.random() * negMessageArr.length)]
+let noteToPlayerContainer = document.getElementById('message')
+let message = `Let's Play`
+noteToPlayerContainer.innerHTML = message;
+
+
+
+let positiveMessageToPlayer =() =>{ 
+    positive = positiveMessageGenerator;
+    noteToPlayerContainer.innerHTML = positive;
+   
+
+}
+let negativeMessageToPlayer =() =>{
+    negative = negativeMessageGenerator;
+    noteToPlayerContainer.innerHTML = negative;
+    
 
 }
 
 
-let positiveMessageGenerator = posMessageArr[Math.floor(Math.random()*posMessageArr.length)]
-let negativeMessageGenerator = negMessageArr[Math.floor(Math.random() * negMessageArr.length)]
-
-
 // RESET MESSAGE TO PLAYER
-function removeMessageToPlayer(){
-    let removeMessage = document.getElementById('message')
-    removeMessage.remove();
+let removeMessageToPlayer =() =>{
+    message = `Let's play`
+    noteToPlayerContainer.innerHTML = message;
 
 
 }
