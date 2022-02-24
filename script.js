@@ -13,7 +13,7 @@
  // GLOBAL VARIABLES
 var rightAnswer = null      // RIGHT ANSWER
 var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
-var playableQuestions = '15' // DEFAULT # OF QUESTIONS
+var playableQuestions = '3' // DEFAULT # OF QUESTIONS
 var playableLevel = 'easy' // DEFAULT LEVEL
 var isPlayButtonDisabled = false;
 var isNextButtonDisabled = true;
@@ -23,7 +23,7 @@ var isAnswer2_ButtonDisabled = true;
 var isAnswer3_ButtonDisabled = true;
 var isAnswer4_ButtonDisabled = true;
 var countArr = 0;
-
+var errorTracker = 0
 
 
 // TOPIC SELECTION SCIENCE
@@ -72,12 +72,14 @@ let questionsAnsweredUntilNow = countArr;
 
 let updateQuestionsAnsweredUntilNow = () => questionsAnsweredUntilNow ++
 
-let winner = () =>{
-    while(questionsAnsweredUntilNow != playableQuestions){
-        
+let isWinner = () =>{
+   if(questionsAnsweredUntilNow === totalNumberOfQuestionForThisTheGame && errorTracker < 3){
+       window.alert(`Congrats , you completed all the questions`)
+
     }
 }
-
+console.log(totalNumberOfQuestionForThisTheGame)
+console.log('this are the question answered so far', questionsAnsweredUntilNow)
 
 // SWITCH DIFFICULTY LEVEL
 let levelArr = ['easy', 'medium', 'hard']
@@ -402,18 +404,18 @@ function isRight(selectedOption){
         stopTimer(timerInterval);
         enableNextAndResetButtons();
         positiveMessageToPlayer();
-       
-        
+        isWinner();
     } else {
         handleErrorTracker();
         stopTimer(timerInterval);
         enableNextAndResetButtons();
         negativeMessageToPlayer();
         scoreBoard.innerHTML = `Your current Score is: ${initialScore} / ${questionsAnsweredUntilNow}`;
+        isWinner();
     }
 }
 // ERROR TRACKER
-let errorTracker = 0
+
 function handleErrorTracker(){
     errorTracker += 1;
     if(errorTracker === 3){
