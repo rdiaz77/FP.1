@@ -4,7 +4,7 @@ body{
 }
 #content{
     background-color: red;
-    background-image: url('/images/Red\ Yellow\ Circles\ Trivia\ Day\ Presentation.jpg');
+    background-image: url('./images/Red\ Yellow\ Circles\ Trivia\ Day\ Presentation.jpg');
     background-repeat:no-repeat;
     margin: auto;
     max-width: 1000px;
@@ -207,6 +207,7 @@ body{
     font-size: 1rem;
     font-style: italic;
     color: whitesmoke;
+    text-align: center;
 }
 
 /* FOOTER */

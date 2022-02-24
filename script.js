@@ -1,19 +1,19 @@
 
-// let person = prompt('Please enter your name: ')
+let person = prompt('Please enter your name: ')
 
-// if (person!= null){
+if (person!= null){
 
-//     var userName = document.getElementById('user-name')
-//     userName.innerHTML = `Welcome to the Trivia Game ${person}`
-// } else {
-//     window.alert('Please enter your name')
+    var userName = document.getElementById('user-name')
+    userName.innerHTML = `Welcome to the Trivia Game ${person}`
+} else {
+    window.alert('Please enter your name')
     
 
-// }
+}
  // GLOBAL VARIABLES
 var rightAnswer = null      // RIGHT ANSWER
 var playableCategory = '17'// DEFAULT PLAYABLE SELECTION
-var playableQuestions = '10' // DEFAULT # OF QUESTIONS
+var playableQuestions = '15' // DEFAULT # OF QUESTIONS
 var playableLevel = 'easy' // DEFAULT LEVEL
 var isPlayButtonDisabled = false;
 var isNextButtonDisabled = true;
@@ -23,6 +23,8 @@ var isAnswer2_ButtonDisabled = true;
 var isAnswer3_ButtonDisabled = true;
 var isAnswer4_ButtonDisabled = true;
 var countArr = 0;
+
+
 
 // TOPIC SELECTION SCIENCE
 var scienceButton = document.getElementById('science')
@@ -51,7 +53,7 @@ function handledCategoryToPlay(category){
 
 //  SWITCH NUMBER OF QUESTIONS
 
-let qFromUser = document.getElementById('dropdown-list')
+let qFromUser = document.getElementById('dropdown-list') // select the number of Question to play
 qFromUser.onchange = function updateNumberOfQuestions (){
     var numberQuestionsSelected = qFromUser.options[qFromUser.selectedIndex].text
     console.log(numberQuestionsSelected);
@@ -59,17 +61,20 @@ qFromUser.onchange = function updateNumberOfQuestions (){
     getFetchQuestions(getDataObj);
 }
 
-
 function handleNumberOfQuestionsToPlay(num){
     playableQuestions = num;
     getDataObj.numOfQuestions = playableQuestions;
     console.log(playableQuestions);
 }
 
+// FINISH GAME
+
+
+
 // SWITCH DIFFICULTY LEVEL
 let levelArr = ['easy', 'medium', 'hard']
 
-function updateDifficultyLevel(){
+function updateDifficultyLevel(){                   //switch the difficulty level given the number of right answers
     if(initialScore === 3){
         playableLevel = 'medium'
         getDataObj.difficultyLevel = playableLevel;
@@ -80,8 +85,6 @@ function updateDifficultyLevel(){
 }
 // SHUFFLE OPTION ARRAY
 let postOptionArr = ['option1','option2','option3','option4']
-
-
 let randomIndex = Math.floor((Math.random() * postOptionArr.length))
 
 function shuffleArray(array) {
@@ -181,12 +184,16 @@ function timerCountDown (){
         console.log('timer')
         if(startTime === 0){
            stopTimer(timerInterval);
+           removeOldQuestion();
+           disableAnswerButtons();
            setTimeout(() => { 
             startTime = 10
             timer.innerHTML = `Your time is ${startTime} sec` }, 1500);
-            window.alert('Your time is up!!! ... Sorry you lose')
+            window.alert(`Your time is up!!! ... Sorry you lose ${person}!!!`)
             isPlayButtonDisabled = false;
             playButton.disabled = isPlayButtonDisabled;
+            
+
         } 
 };
 
@@ -217,7 +224,6 @@ playButton.addEventListener('click', function(){
     resetTrackers()
     getFetchQuestions(getDataObj)
     postQuestions()
-    // timerCountDown()
     isPlayButtonDisabled = true;
     playButton.disabled = isPlayButtonDisabled;
     enableAnswerButtons();
@@ -253,13 +259,11 @@ resetButton.addEventListener('click', function(){
         disableAnswerButtons();
         disableNextAndResetButtons();
         removeMessageToPlayer()
-        
-        
 
 })
 
 
-// UPDATE INITIAL STATUS OF BUTTONS
+// UPDATE BUTTON STATUS
 
 
 var enableNextAndResetButtons = () => {
@@ -275,6 +279,11 @@ var disableNextAndResetButtons = () => {
     isResetButtonDisabled = true;
     resetButton.disabled = isResetButtonDisabled;
     
+}
+var disableOnlyNextButton = () => {
+    isNextButtonDisabled = true;
+    nextButton.disabled = isNextButtonDisabled;
+    console.log('next is deactivated')
 }
 var enableAnswerButtons = () =>{
     isAnswer1_ButtonDisabled = false;
@@ -299,9 +308,9 @@ var disableAnswerButtons = () =>{
 
 // DATA OBJECT
 var getDataObj = {
-    numOfQuestions: playableQuestions,   // let numOfQuestions = '30'
-    categorySelected: playableCategory, // science 17 / geo 22
-    difficultyLevel: playableLevel,// medium / hard
+    numOfQuestions: playableQuestions,    // let numOfQuestions = '30'
+    categorySelected: playableCategory,   // science 17 / geo 22
+    difficultyLevel: playableLevel,       // medium / hard
     type: 'multiple',
 }
 
@@ -381,8 +390,8 @@ function isRight(selectedOption){
         updateScore();
         stopTimer(timerInterval);
         enableNextAndResetButtons();
-        positiveMessageToPlayer()
-    
+        positiveMessageToPlayer();
+       
         
     } else {
         handleErrorTracker();
@@ -397,9 +406,10 @@ let errorTracker = 0
 function handleErrorTracker(){
     errorTracker += 1;
     if(errorTracker === 3){
-        cruxGeneration3()
-       setTimeout(window.alert('GAME OVER'), 2000) ; 
-       setTimeout(resetButton(), 500);
+        setTimeout(disableOnlyNextButton(), 2000);
+        cruxGeneration3();
+        stopTimer(timerInterval);
+        window.alert('GAME OVER');
     } else if(errorTracker === 1){
         cruxGeneration1()
     } else if(errorTracker === 2){
@@ -441,8 +451,8 @@ let removeCross = (() =>{
 
 
 // MESSAGE TO PLAYER
-let posMessageArr = ['Great Work', 'You Rock', 'Wow!!!', 'You are a Star'] // 'You Rock', 'Wow!!!', 'You are a Star'
-let negMessageArr = ['Try again', 'Come on!!!', 'Very Close'] //  'You just missed that one'
+let posMessageArr = ['Great Work', `You Rock!!!`, `Wow!!!`, 'You are a Star'] // 'You Rock', 'Wow!!!', 'You are a Star'
+let negMessageArr = ['Try again', `Come on!!!`, 'Very Close'] //  'You just missed that one'
 let positiveMessageGenerator = posMessageArr[Math.floor(Math.random()*posMessageArr.length)]
 let negativeMessageGenerator = negMessageArr[Math.floor(Math.random() * negMessageArr.length)]
 let noteToPlayerContainer = document.getElementById('message')
@@ -455,13 +465,11 @@ let positiveMessageToPlayer =() =>{
     positive = positiveMessageGenerator;
     noteToPlayerContainer.innerHTML = positive;
    
-
 }
 let negativeMessageToPlayer =() =>{
     negative = negativeMessageGenerator;
     noteToPlayerContainer.innerHTML = negative;
     
-
 }
 
 
@@ -469,7 +477,6 @@ let negativeMessageToPlayer =() =>{
 let removeMessageToPlayer =() =>{
     message = `Let's play`
     noteToPlayerContainer.innerHTML = message;
-
 
 }
 
